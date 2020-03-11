@@ -1,0 +1,504 @@
+Terminaux inutilisés dans la grammaire
+
+   tCOMPARAISON
+   tINFSTRICT
+   tSUPSTRICT
+   tSUPEGAL
+   tINFEGAL
+   tDIFF
+   tNOT
+   tCONST
+
+
+État 19 conflits: 1 décalage/réduction
+
+
+Grammaire
+
+    0 $accept: program $end
+
+    1 program: %empty
+    2        | type tMAIN tOP tCP body
+
+    3 type: %empty
+    4     | tINT
+    5     | tVOID
+    6     | tCHAR
+
+    7 body: %empty
+    8     | tOB instruction tCB
+    9     | tIF body
+   10     | tIF body tELSE
+
+   11 instruction: %empty
+   12            | Expression tVIRG
+   13            | type tVAR tEGAL tNOMBRE tVIRG
+
+   14 Expression: tNOMBRE
+   15           | Expression tPLUS Expression
+   16           | Expression tMOINS Expression
+   17           | Expression tFOIS Expression
+   18           | Expression tDIVISE Expression
+   19           | tMOINS Expression
+   20           | Expression tPUISSANCE Expression
+   21           | tOP Expression tCP
+
+
+Terminaux, suivis des règles où ils apparaissent
+
+$end (0) 0
+error (256)
+tNOMBRE (258) 13 14
+tPLUS (259) 15
+tMOINS (260) 16 19
+tFOIS (261) 17
+tDIVISE (262) 18
+tPUISSANCE (263) 20
+tOP (264) 2 21
+tCP (265) 2 21
+tOB (266) 8
+tCB (267) 8
+tIF (268) 9 10
+tELSE (269) 10
+tVAR (270) 13
+tCOMPARAISON (271)
+tEGAL (272) 13
+tINFSTRICT (273)
+tSUPSTRICT (274)
+tSUPEGAL (275)
+tINFEGAL (276)
+tDIFF (277)
+tNOT (278)
+tINT (279) 4
+tVOID (280) 5
+tCHAR (281) 6
+tVIRG (282) 12 13
+tMAIN (283) 2
+tCONST (284)
+tNEG (285)
+
+
+Non-terminaux, suivis des règles où ils apparaissent
+
+$accept (31)
+    à gauche: 0
+program (32)
+    à gauche: 1 2, à droite: 0
+type (33)
+    à gauche: 3 4 5 6, à droite: 2 13
+body (34)
+    à gauche: 7 8 9 10, à droite: 2 9 10
+instruction (35)
+    à gauche: 11 12 13, à droite: 8
+Expression (36)
+    à gauche: 14 15 16 17 18 19 20 21, à droite: 12 15 16 17 18 19
+    20 21
+
+
+État 0
+
+    0 $accept: . program $end
+
+    tINT   décalage et aller à l'état 1
+    tVOID  décalage et aller à l'état 2
+    tCHAR  décalage et aller à l'état 3
+
+    tMAIN     réduction par utilisation de la règle 3 (type)
+    $défaut  réduction par utilisation de la règle 1 (program)
+
+    program  aller à l'état 4
+    type     aller à l'état 5
+
+
+État 1
+
+    4 type: tINT .
+
+    $défaut  réduction par utilisation de la règle 4 (type)
+
+
+État 2
+
+    5 type: tVOID .
+
+    $défaut  réduction par utilisation de la règle 5 (type)
+
+
+État 3
+
+    6 type: tCHAR .
+
+    $défaut  réduction par utilisation de la règle 6 (type)
+
+
+État 4
+
+    0 $accept: program . $end
+
+    $end  décalage et aller à l'état 6
+
+
+État 5
+
+    2 program: type . tMAIN tOP tCP body
+
+    tMAIN  décalage et aller à l'état 7
+
+
+État 6
+
+    0 $accept: program $end .
+
+    $défaut  accepter
+
+
+État 7
+
+    2 program: type tMAIN . tOP tCP body
+
+    tOP  décalage et aller à l'état 8
+
+
+État 8
+
+    2 program: type tMAIN tOP . tCP body
+
+    tCP  décalage et aller à l'état 9
+
+
+État 9
+
+    2 program: type tMAIN tOP tCP . body
+
+    tOB  décalage et aller à l'état 10
+    tIF  décalage et aller à l'état 11
+
+    $défaut  réduction par utilisation de la règle 7 (body)
+
+    body  aller à l'état 12
+
+
+État 10
+
+    8 body: tOB . instruction tCB
+
+    tNOMBRE  décalage et aller à l'état 13
+    tMOINS   décalage et aller à l'état 14
+    tOP      décalage et aller à l'état 15
+    tINT     décalage et aller à l'état 1
+    tVOID    décalage et aller à l'état 2
+    tCHAR    décalage et aller à l'état 3
+
+    tCB       réduction par utilisation de la règle 11 (instruction)
+    $défaut  réduction par utilisation de la règle 3 (type)
+
+    type         aller à l'état 16
+    instruction  aller à l'état 17
+    Expression   aller à l'état 18
+
+
+État 11
+
+    9 body: tIF . body
+   10     | tIF . body tELSE
+
+    tOB  décalage et aller à l'état 10
+    tIF  décalage et aller à l'état 11
+
+    $défaut  réduction par utilisation de la règle 7 (body)
+
+    body  aller à l'état 19
+
+
+État 12
+
+    2 program: type tMAIN tOP tCP body .
+
+    $défaut  réduction par utilisation de la règle 2 (program)
+
+
+État 13
+
+   14 Expression: tNOMBRE .
+
+    $défaut  réduction par utilisation de la règle 14 (Expression)
+
+
+État 14
+
+   19 Expression: tMOINS . Expression
+
+    tNOMBRE  décalage et aller à l'état 13
+    tMOINS   décalage et aller à l'état 14
+    tOP      décalage et aller à l'état 15
+
+    Expression  aller à l'état 20
+
+
+État 15
+
+   21 Expression: tOP . Expression tCP
+
+    tNOMBRE  décalage et aller à l'état 13
+    tMOINS   décalage et aller à l'état 14
+    tOP      décalage et aller à l'état 15
+
+    Expression  aller à l'état 21
+
+
+État 16
+
+   13 instruction: type . tVAR tEGAL tNOMBRE tVIRG
+
+    tVAR  décalage et aller à l'état 22
+
+
+État 17
+
+    8 body: tOB instruction . tCB
+
+    tCB  décalage et aller à l'état 23
+
+
+État 18
+
+   12 instruction: Expression . tVIRG
+   15 Expression: Expression . tPLUS Expression
+   16           | Expression . tMOINS Expression
+   17           | Expression . tFOIS Expression
+   18           | Expression . tDIVISE Expression
+   20           | Expression . tPUISSANCE Expression
+
+    tPLUS       décalage et aller à l'état 24
+    tMOINS      décalage et aller à l'état 25
+    tFOIS       décalage et aller à l'état 26
+    tDIVISE     décalage et aller à l'état 27
+    tPUISSANCE  décalage et aller à l'état 28
+    tVIRG       décalage et aller à l'état 29
+
+
+État 19
+
+    9 body: tIF body .
+   10     | tIF body . tELSE
+
+    tELSE  décalage et aller à l'état 30
+
+    tELSE     [réduction par utilisation de la règle 9 (body)]
+    $défaut  réduction par utilisation de la règle 9 (body)
+
+
+État 20
+
+   15 Expression: Expression . tPLUS Expression
+   16           | Expression . tMOINS Expression
+   17           | Expression . tFOIS Expression
+   18           | Expression . tDIVISE Expression
+   19           | tMOINS Expression .
+   20           | Expression . tPUISSANCE Expression
+
+    tPUISSANCE  décalage et aller à l'état 28
+
+    $défaut  réduction par utilisation de la règle 19 (Expression)
+
+
+État 21
+
+   15 Expression: Expression . tPLUS Expression
+   16           | Expression . tMOINS Expression
+   17           | Expression . tFOIS Expression
+   18           | Expression . tDIVISE Expression
+   20           | Expression . tPUISSANCE Expression
+   21           | tOP Expression . tCP
+
+    tPLUS       décalage et aller à l'état 24
+    tMOINS      décalage et aller à l'état 25
+    tFOIS       décalage et aller à l'état 26
+    tDIVISE     décalage et aller à l'état 27
+    tPUISSANCE  décalage et aller à l'état 28
+    tCP         décalage et aller à l'état 31
+
+
+État 22
+
+   13 instruction: type tVAR . tEGAL tNOMBRE tVIRG
+
+    tEGAL  décalage et aller à l'état 32
+
+
+État 23
+
+    8 body: tOB instruction tCB .
+
+    $défaut  réduction par utilisation de la règle 8 (body)
+
+
+État 24
+
+   15 Expression: Expression tPLUS . Expression
+
+    tNOMBRE  décalage et aller à l'état 13
+    tMOINS   décalage et aller à l'état 14
+    tOP      décalage et aller à l'état 15
+
+    Expression  aller à l'état 33
+
+
+État 25
+
+   16 Expression: Expression tMOINS . Expression
+
+    tNOMBRE  décalage et aller à l'état 13
+    tMOINS   décalage et aller à l'état 14
+    tOP      décalage et aller à l'état 15
+
+    Expression  aller à l'état 34
+
+
+État 26
+
+   17 Expression: Expression tFOIS . Expression
+
+    tNOMBRE  décalage et aller à l'état 13
+    tMOINS   décalage et aller à l'état 14
+    tOP      décalage et aller à l'état 15
+
+    Expression  aller à l'état 35
+
+
+État 27
+
+   18 Expression: Expression tDIVISE . Expression
+
+    tNOMBRE  décalage et aller à l'état 13
+    tMOINS   décalage et aller à l'état 14
+    tOP      décalage et aller à l'état 15
+
+    Expression  aller à l'état 36
+
+
+État 28
+
+   20 Expression: Expression tPUISSANCE . Expression
+
+    tNOMBRE  décalage et aller à l'état 13
+    tMOINS   décalage et aller à l'état 14
+    tOP      décalage et aller à l'état 15
+
+    Expression  aller à l'état 37
+
+
+État 29
+
+   12 instruction: Expression tVIRG .
+
+    $défaut  réduction par utilisation de la règle 12 (instruction)
+
+
+État 30
+
+   10 body: tIF body tELSE .
+
+    $défaut  réduction par utilisation de la règle 10 (body)
+
+
+État 31
+
+   21 Expression: tOP Expression tCP .
+
+    $défaut  réduction par utilisation de la règle 21 (Expression)
+
+
+État 32
+
+   13 instruction: type tVAR tEGAL . tNOMBRE tVIRG
+
+    tNOMBRE  décalage et aller à l'état 38
+
+
+État 33
+
+   15 Expression: Expression . tPLUS Expression
+   15           | Expression tPLUS Expression .
+   16           | Expression . tMOINS Expression
+   17           | Expression . tFOIS Expression
+   18           | Expression . tDIVISE Expression
+   20           | Expression . tPUISSANCE Expression
+
+    tFOIS       décalage et aller à l'état 26
+    tDIVISE     décalage et aller à l'état 27
+    tPUISSANCE  décalage et aller à l'état 28
+
+    $défaut  réduction par utilisation de la règle 15 (Expression)
+
+
+État 34
+
+   15 Expression: Expression . tPLUS Expression
+   16           | Expression . tMOINS Expression
+   16           | Expression tMOINS Expression .
+   17           | Expression . tFOIS Expression
+   18           | Expression . tDIVISE Expression
+   20           | Expression . tPUISSANCE Expression
+
+    tFOIS       décalage et aller à l'état 26
+    tDIVISE     décalage et aller à l'état 27
+    tPUISSANCE  décalage et aller à l'état 28
+
+    $défaut  réduction par utilisation de la règle 16 (Expression)
+
+
+État 35
+
+   15 Expression: Expression . tPLUS Expression
+   16           | Expression . tMOINS Expression
+   17           | Expression . tFOIS Expression
+   17           | Expression tFOIS Expression .
+   18           | Expression . tDIVISE Expression
+   20           | Expression . tPUISSANCE Expression
+
+    tPUISSANCE  décalage et aller à l'état 28
+
+    $défaut  réduction par utilisation de la règle 17 (Expression)
+
+
+État 36
+
+   15 Expression: Expression . tPLUS Expression
+   16           | Expression . tMOINS Expression
+   17           | Expression . tFOIS Expression
+   18           | Expression . tDIVISE Expression
+   18           | Expression tDIVISE Expression .
+   20           | Expression . tPUISSANCE Expression
+
+    tPUISSANCE  décalage et aller à l'état 28
+
+    $défaut  réduction par utilisation de la règle 18 (Expression)
+
+
+État 37
+
+   15 Expression: Expression . tPLUS Expression
+   16           | Expression . tMOINS Expression
+   17           | Expression . tFOIS Expression
+   18           | Expression . tDIVISE Expression
+   20           | Expression . tPUISSANCE Expression
+   20           | Expression tPUISSANCE Expression .
+
+    tPUISSANCE  décalage et aller à l'état 28
+
+    $défaut  réduction par utilisation de la règle 20 (Expression)
+
+
+État 38
+
+   13 instruction: type tVAR tEGAL tNOMBRE . tVIRG
+
+    tVIRG  décalage et aller à l'état 39
+
+
+État 39
+
+   13 instruction: type tVAR tEGAL tNOMBRE tVIRG .
+
+    $défaut  réduction par utilisation de la règle 13 (instruction)

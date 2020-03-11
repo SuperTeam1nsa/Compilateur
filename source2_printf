@@ -1,0 +1,61 @@
+%{
+             
+#include <stdlib.h>
+#include <math.h>
+#include"y.tab.h"
+//rq si on veut tester ss remplacer les return par un printf on peut define les token comme
+//des strings:
+// #define tPLUS "+"
+%}
+
+blancs    [ \t\n]+
+chiffre   [0-9]
+entier    {chiffre}+
+exposant  [eE][+-]?{entier}
+nom_variable [a-zA-Z]+
+reel    {entier}("."{entier})?{exposant}?
+
+%%
+
+{blancs}  { /* On ignore */ }
+{reel}    {
+     /* yylval=atof(yytext");*/
+     printf("tNOMBRE ");
+    }
+"{" {printf("tOB ");return tOB;}
+"}" printf("tCB ");
+"+"  printf("tPLUS ");
+"-"  printf("tMOINS ");
+"*"  printf("tFOIS ");
+"/"  printf("tDIVISE ");
+"^"  printf("tPUISSANCE ");
+"("  printf("tOP ");
+")"  printf("tCP ");
+%"\n" printf("tNEW_LINE ");
+"==" printf("tCOMPARAISON ");
+"="  printf("tEGAL ");
+"<"  printf("tINFSTRICT ");
+">"  printf("tSUPSTRICT ");
+">=" printf("tSUPEGAL ");
+"<=" printf("tINFEGAL ");
+"!=" printf("tDIFF ");
+"!" printf("tNOT ");
+"int" printf("tINT ");
+"char" printf("tCHAR ");
+"void" printf("tVOID ");
+";"  printf("tVIRG ");
+"main" printf("tMAIN ");
+"const" printf("tCONST ");
+"if" printf("tIF ");
+"else" printf("tELSE ");
+{nom_variable} printf(" variable : %s ",yytext);
+
+%%
+int yywrap(void){
+    return 1;
+}
+//int main(){
+//    yylex();
+//    return 0;
+//}
+

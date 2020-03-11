@@ -1,0 +1,18 @@
+D [0-9]
+E [Ee][-+]?{D}+
+
+%% fin def var gloable
+
+{D}+ |
+{D}+{E} printf("integer\n");
+{D}*"."{D}*({E})? printf("real\n");
+
+%% fin def rule
+
+int yywrap(void) {  
+       return 1;     
+}  
+int main(void) {     
+    yylex();    
+     return 0;     
+}
