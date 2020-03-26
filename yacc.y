@@ -3,18 +3,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
-	int yylex(void);
+#include "symboltable.h"
+  
+  char * type;
+        int yylex(void);
 	int yyerror(const char *s);
 	int success = 1;
 
 %}
 
+%union {
+  int nb;
+  char* str;
+}
+
 %token  tNOMBRE
 %token  tPLUS  tMOINS tFOIS  tDIVISE  tPUISSANCE
 %token  tOP tCP
 %token  tOB tCB
-%token  tIF tELSE tVAR
+%token  tIF tELSE tVAR tWHILE
 %token  tCOMPARAISON tEGAL tINFSTRICT tSUPSTRICT
 %token  tSUPEGAL tINFEGAL tDIFF tNOT 
 %token  tINT tVOID tCHAR tVIRG tMAIN tCONST
@@ -24,6 +31,7 @@
 %left tNEG
 %left tCOMPARAISON tEGAL tINFSTRICT tSUPSTRICT
 %left tSUPEGAL tINFEGAL tDIFF
+
 %right tNOT
 %right tPUISSANCE
 
@@ -34,7 +42,7 @@ program :
     | type tMAIN tOP tCP body 
     ;
 type :
-    | tINT
+    |tINT
     |tVOID
     |tCHAR
     ;
