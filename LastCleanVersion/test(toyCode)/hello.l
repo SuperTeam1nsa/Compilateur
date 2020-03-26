@@ -1,6 +1,6 @@
 %{
 
-#include "y.tab.h"
+#include "hello.tab.h"
 int yyerror(char *errormsg);
 
 %}

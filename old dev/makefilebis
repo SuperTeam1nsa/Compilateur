@@ -1,0 +1,20 @@
+all: compiler interpreter
+
+lex.yy.c: lexer.l
+	flex lexer.l
+
+rule.tab.c: parser.y
+	bison -d -v parser.y
+
+compiler: lex.yy.c parser.tab.c symboltable.c instructiontable.c
+	gcc -std=c99 -g -o compilateur.exe lex.yy.c rule.tab.c symboltable.c instructiontable.c
+
+test: compiler
+	./compilateur.exe < codeC.c
+
+# To start over from scratch, type 'make clean'.  This
+# removes the executable file, as well as old .o object
+# files and *~ backup files:
+#
+clean: 
+	$(RM) final *.o *~
