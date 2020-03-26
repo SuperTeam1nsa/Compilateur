@@ -19,7 +19,7 @@ reel    {entier}("."{entier})?{exposant}?
 
 {blancs}  { /* On ignore */ }
 {reel}    {
-     /* yylval=atof(yytext);*/
+     /* yylval.nb=atoi(yytext);*/
      return(tNOMBRE);
     }
 "+"  return(tPLUS);
@@ -38,12 +38,13 @@ reel    {entier}("."{entier})?{exposant}?
 "<=" return(tINFEGAL);
 "!=" return(tDIFF);
 "!" return(tNOT);
-"int" return(tINT);
+"int" { yylval.str = strdup(yytext); return tINT ; }
 ";"  return(tVIRG);
 "main" return(tMAIN);
 "const" return(tCONST);
 "if" return(tIF);
 "else" return(tELSE);
+"while" { yylval.str = strdup(yytext); return tWHILE ; }
 {nom_variable} return variable : %s",yytext);
 
 %%
