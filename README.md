@@ -21,6 +21,8 @@ It will generate lex.yy.c file
 Run the following commands
 
     gcc -o a.out y.tab.c lex.yy.c -lm               (-lfl possible)
+    //gcc lex.yy.c y.tab.c -o compilo (alternative)
+
     ./a.out < exampleC
 
 

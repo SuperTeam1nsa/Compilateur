@@ -24,6 +24,7 @@
 #define tCHAR 22
 #define tINT 23
 #define tVAR 24
+#define tWHILE 25
 
 /*#define YYSTYPE int;
 extern YYSTYPE yyval*/
