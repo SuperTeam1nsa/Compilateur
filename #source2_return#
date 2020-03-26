@@ -1,0 +1,57 @@
+%{
+             
+#include <stdlib.h>
+#include <math.h>
+
+//rq si on veut tester ss remplacer les return par un printf on peut define les token comme
+//des strings:
+// #define tPLUS "+"
+%}
+
+blancs    [ \t]+
+chiffre   [0-9]
+entier    {chiffre}+
+exposant  [eE][+-]?{entier}
+nom_variable [a-zA-Z]+
+reel    {entier}("."{entier})?{exposant}?
+
+%%
+
+{blancs}  { /* On ignore */ }
+{reel}    {
+     /* yylval=atof(yytext);*/
+     return(tNOMBRE);
+    }
+"+"  return(tPLUS);
+"-"  return(tMOINS);
+"*"  return(tFOIS);
+"/"  return(tDIVISE);
+"^"  return(tPUISSANCE);
+"("  return(tOP);
+")"  return(tCP);
+"\n" return(tNEW_LINE);
+"==" return(tCOMPARAISON);
+"="  return(tEGAL);
+"<"  return(tINFSTRICT);
+">"  return(tSUPSTRICT);
+">=" return(tSUPEGAL);
+"<=" return(tINFEGAL);
+"!=" return(tDIFF);
+"!" return(tNOT);
+"int" return(tINT);
+";"  return(tVIRG);
+"main" return(tMAIN);
+"const" return(tCONST);
+"if" return(tIF);
+"else" return(tELSE);
+{nom_variable} return variable : %s",yytext);
+
+%%
+int yywrap(void){
+    return 1;
+}
+int main(){
+    yylex();
+    return 0;
+}
+
