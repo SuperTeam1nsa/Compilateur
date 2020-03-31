@@ -39,35 +39,37 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     tNOMBRE = 258,
-     tPLUS = 259,
-     tMOINS = 260,
-     tFOIS = 261,
-     tDIVISE = 262,
-     tPUISSANCE = 263,
-     tOP = 264,
-     tCP = 265,
-     tOB = 266,
-     tCB = 267,
-     tIF = 268,
-     tELSE = 269,
-     tVAR = 270,
-     tWHILE = 271,
-     tCOMPARAISON = 272,
-     tEGAL = 273,
-     tINFSTRICT = 274,
-     tSUPSTRICT = 275,
-     tSUPEGAL = 276,
-     tINFEGAL = 277,
-     tDIFF = 278,
-     tNOT = 279,
-     tINT = 280,
-     tVOID = 281,
-     tCHAR = 282,
-     tVIRG = 283,
-     tMAIN = 284,
-     tCONST = 285,
-     tNEG = 286
+     tPLUS = 258,
+     tMOINS = 259,
+     tFOIS = 260,
+     tDIVISE = 261,
+     tCOMMA = 262,
+     tOP = 263,
+     tCP = 264,
+     tOB = 265,
+     tCB = 266,
+     tVAR = 267,
+     tCOMPARAISON = 268,
+     tEGAL = 269,
+     tINFSTRICT = 270,
+     tSUPSTRICT = 271,
+     tSUPEGAL = 272,
+     tINFEGAL = 273,
+     tDIFF = 274,
+     tNOT = 275,
+     tINT = 276,
+     tVOID = 277,
+     tCHAR = 278,
+     tFLOAT = 279,
+     tVIRG = 280,
+     tMAIN = 281,
+     tCONST = 282,
+     tINT_VAL = 283,
+     tFLOAT_VAL = 284,
+     tCHAR_VAL = 285,
+     tRETURN = 286,
+     tPRINTF = 287,
+     tNEG = 288
    };
 #endif
 
@@ -78,15 +80,16 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 16 "parser.y"
+#line 18 "parser.y"
 
 int nb;
 float reel;
 char* str;
 
 
+
 /* Line 1676 of yacc.c  */
-#line 90 "parser.tab.h"
+#line 93 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

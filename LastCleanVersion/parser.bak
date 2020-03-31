@@ -52,7 +52,6 @@ Program :
     ;
 Type :
      tINT
-    |tFLOAT
     |tVOID
     |tCHAR
     ;

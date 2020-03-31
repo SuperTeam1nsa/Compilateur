@@ -10,8 +10,6 @@ chiffre   [0-9]
 entier    {chiffre}+
 float {entier}*\.{entier}+
 char '(\\[ntbr0])|.'
-exposant  [eE][+-]?{entier}
-reel    {entier}("."{entier})?{exposant}?
 nom_variable [a-zA-Z][a-zA-Z0-9_]*
 
 %%
@@ -43,7 +41,6 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 "return" { printf("tRETURN ");return(tRETURN);}
 {entier} {printf("tINT_VAL ");yylval.nb = atoi(yytext);return(tINT_VAL);}
 {float} {printf("tFLOAT_VAL ");yylval.reel= atof(yytext);return(tFLOAT_VAL);}
-{reel}    {printf("tFLOAT_VAL ");yylval.reel= atof(yytext);return(tFLOAT_VAL);}
 {char} {printf("tCHAR_VAL ");yylval.str = yytext;return(tCHAR_VAL);}
 {nom_variable} {printf("tVAR:%s ",yytext);yylval.str = yytext; return(tVAR);}
 
