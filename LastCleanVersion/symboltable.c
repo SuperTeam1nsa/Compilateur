@@ -1,19 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "symboltable.h"
 
 #define SIZE 10
 
 struct ligne * tab;
-int indiceCourant = 0; 
+int profondeur = 0; 
 
 /*int main() {
 
+    //TEST
 	tab = init();
-	ajouter ("i", "int", 1, 1);
-	ajouter ("j", "double", 0, 1);
-	ajouter ("k", "int", 0, 1);
+	ajouter ("a", "int", 1, 1);
+	ajouter ("b", "double", 0, 1);
+	ajouter ("c", "int", 0, 1);
 	int add = ajouterTmp ("int");
 	printf ("Adresse Tmp : %d\n", add); 
 	
@@ -24,25 +26,27 @@ int indiceCourant = 0;
 }*/
 
 
-int getIndice() {
-	return indiceCourant;
-}
-
 void init() {
 
 	tab = malloc(sizeof(struct ligne)*SIZE);
 }
 
+int getIndice() {
+	return profondeur;
+}
+
+
 void decrementerIndice(){
-	indiceCourant--;
+	profondeur--;
 }
 
 void afficherTableSymboles() {
 
-	printf("	+------------------------------+\n");
+	printf("	               ***              \n");
 	printf("	|      Table des symboles      |\n");
-	printf("	+------------------------------+\n");
-	for (int i=0; i < indiceCourant ; i++) {
+	printf("	+              ***             + \n");
+    printf("	+------------------------------+\n");
+	for (int i=0; i < profondeur ; i++) {
 		printf("	| %5s | %8s | %3d | %3d |\n",tab[i].id, tab[i].type, tab[i].init, tab[i].depth);
 		printf("	+------------------------------+\n");
 	}
@@ -51,7 +55,7 @@ void afficherTableSymboles() {
 
 
 int getAdresse(char *s) {
-	for (int i=indiceCourant - 1; i >= 0 ; i--) {
+	for (int i=profondeur - 1; i >= 0 ; i--) {
 		if (!strcmp(s, tab[i].id)) {
 			return i;
 		}
@@ -61,28 +65,28 @@ int getAdresse(char *s) {
 
 void ajouter(char id[16], char type[8], int init, int depth) {
 
-	if (indiceCourant < 0 || indiceCourant >= SIZE) {
-		printf("Erreur d'indice\n");
+	if (profondeur < 0 || profondeur >= SIZE) {
+		printf("Erreur ajouter TABLESYMBOL indice\n");
 		exit(1);
 	} else {
 		struct ligne newLine = { .id = "", .type = "", .init = init, .depth = depth };	
 		strcpy(newLine.id , id);	
 		strcpy(newLine.type , type);
-		tab[indiceCourant] = newLine ;
-		indiceCourant++;
+		tab[profondeur] = newLine ;
+		profondeur++;
 	}
 }
 
 int ajouterTmp (char type[8]){
-	if (indiceCourant < 0 || indiceCourant >= SIZE) {
-		printf("Erreur d'indice\n");
+	if (profondeur < 0 || profondeur >= SIZE) {
+		printf("Erreur ajouterTMP TABLESYMBOL indice pr\n");
 		exit(1);
 	} else {
 		struct ligne newLine = { .id = "#", .type = "", .init = 1, .depth = 0 };	
 		strcpy(newLine.type , type);
-		tab[indiceCourant] = newLine ;
+		tab[profondeur] = newLine ;
 	}
-	return indiceCourant++;
+	return profondeur++;
 }
 
 
