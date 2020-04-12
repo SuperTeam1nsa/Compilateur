@@ -41,11 +41,12 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 "main" {printf("tMAIN "); return(tMAIN);}
 "printf" {printf("tPRINTF ");return(tPRINTF);}
 "return" { printf("tRETURN ");return(tRETURN);}
+"const" { printf("tCONST ");return(tCONST);}
 {entier} {printf("tINT_VAL ");yylval.nb = atoi(yytext);return(tINT_VAL);}
 {float} {printf("tFLOAT_VAL ");yylval.reel= atof(yytext);return(tFLOAT_VAL);}
 {reel}    {printf("tFLOAT_VAL ");yylval.reel= atof(yytext);return(tFLOAT_VAL);}
 {char} {printf("tCHAR_VAL ");yylval.str = yytext;return(tCHAR_VAL);}
-{nom_variable} {printf("tVAR:%s ",yytext);yylval.str = yytext; return(tVAR);}
+{nom_variable} {printf("tVAR [LEXER :%s] ",yytext);yylval.str = yytext; return(tVAR);}
 
 %%
 /*

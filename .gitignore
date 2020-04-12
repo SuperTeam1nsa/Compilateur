@@ -1,0 +1,8 @@
+
+*.bak
+LastCleanVersion/lex.yy.c
+LastCleanVersion/parser.output
+LastCleanVersion/parser.tab.h
+LastCleanVersion/parser.tab.c
+LastCleanVersion/compilateur.exe
+*.exe

@@ -4,10 +4,10 @@
 
 #include "symboltable.h"
 
-#define SIZE 10
+#define SIZE 100
 
-struct ligne * tab;
-int profondeur = 0; 
+struct ligne tab[SIZE];//malloc(sizeof(struct ligne)*100);
+int profondeur = 0;
 
 /*int main() {
 
@@ -17,19 +17,13 @@ int profondeur = 0;
 	ajouter ("b", "double", 0, 1);
 	ajouter ("c", "int", 0, 1);
 	int add = ajouterTmp ("int");
-	printf ("Adresse Tmp : %d\n", add); 
-	
-	afficher (tab); 
-	
+	printf ("Adresse Tmp : %d\n", add);
+
+	afficher (tab);
+
 	return 0;
 
 }*/
-
-
-void init() {
-
-	tab = malloc(sizeof(struct ligne)*SIZE);
-}
 
 int getIndice() {
 	return profondeur;
@@ -47,46 +41,71 @@ void afficherTableSymboles() {
 	printf("	+              ***             + \n");
     printf("	+------------------------------+\n");
 	for (int i=0; i < profondeur ; i++) {
-		printf("	| %5s | %8s | %3d | %3d |\n",tab[i].id, tab[i].type, tab[i].init, tab[i].depth);
+		printf("	| %5s | %8s | %3d | %3d | %s \n",tab[i].id, tab[i].type, tab[i].init, tab[i].depth,"%s", tab[i].isConst ? "true" : "false");
 		printf("	+------------------------------+\n");
 	}
 
 }
 
 
-int getAdresse(char *s) {
+int getAdresse(char *id) {
 	for (int i=profondeur - 1; i >= 0 ; i--) {
-		if (!strcmp(s, tab[i].id)) {
+		// Be carreful Hichem negative or positive, anything that's not a 0 is a true value in if
+		if (strcmp(id, tab[i].id)==0) {
 			return i;
 		}
 	}
-	return -1;
+	printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+	exit(-1);
 }
 
-void ajouter(char id[16], char type[8], int init, int depth) {
+int ajouter(char id[16], float type, int init, bool isConst) {
 
 	if (profondeur < 0 || profondeur >= SIZE) {
 		printf("Erreur ajouter TABLESYMBOL indice\n");
 		exit(1);
 	} else {
-		struct ligne newLine = { .id = "", .type = "", .init = init, .depth = depth };	
-		strcpy(newLine.id , id);	
-		strcpy(newLine.type , type);
+		struct ligne newLine = { .id = "", .type = type, .init = init, .depth = profondeur, .isConst=isConst };
+		strcpy(newLine.id , id);
+		//strcpy(newLine.type , type);
 		tab[profondeur] = newLine ;
 		profondeur++;
 	}
+	return profondeur;
 }
 
-int ajouterTmp (char type[8]){
+///???
+int ajouterTmp (float type){
 	if (profondeur < 0 || profondeur >= SIZE) {
 		printf("Erreur ajouterTMP TABLESYMBOL indice pr\n");
 		exit(1);
 	} else {
-		struct ligne newLine = { .id = "#", .type = "", .init = 1, .depth = 0 };	
-		strcpy(newLine.type , type);
+		struct ligne newLine = { .id = "#", .type = type, .init = 1, .depth = 0, .isConst=false};
+		//strcpy(newLine.id , id);
+		//strcpy(newLine.type , type);
 		tab[profondeur] = newLine ;
 	}
 	return profondeur++;
+}
+
+//check if var à cette adresse est initialisée
+bool varEstIni(int addr) {
+	if(addr <= profondeur)
+		return tab[addr].init;
+	else{
+		printf("Variable non déclarée ! Surement pas initialise de facto :p ");
+		exit(-1);
+	}
+}
+
+//quand on affecte une valeur à la variable on appelle cette fonction pour dire ok ini
+void iniVar(int addr) {
+	tab[addr].init = true;
+}
+
+//check const before affect value
+bool isSymbolConst(int addr) {
+	return tab[addr].isConst;
 }
 
 
