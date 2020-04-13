@@ -1,8 +1,9 @@
 int main(){
 int i, j,k,r;
 float a= 10e-1;
-int b= 1e2;
-int c= 1e+2;
+float b= 1e2;
+float c= 1e+2;
+int z = 6;
 i =3;
 j=4;
 k=8;

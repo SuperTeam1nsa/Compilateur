@@ -23,9 +23,9 @@ void operation(const char * operation, int addr1, int addr2) {
 %}
 
 %union {
-	int nb;
-	float reel;
-	char* str;
+	int INT;
+	float FLOAT;
+	char* STR;
 }
  
 %token  tCOMMA
@@ -45,10 +45,12 @@ void operation(const char * operation, int addr1, int addr2) {
 
 %right tNOT tEGAL
 
-%type<reel> Expression
-%type<reel> Val
-%type<reel> Type
-%type<str> tVAR
+
+//%type<FLOAT> Expression
+/*%type<reel> Val
+%type<reel> Type*/
+%type<STR> tVAR
+
 
 %start Program
 %%
@@ -58,76 +60,107 @@ Program :
 	| tVOID tMAIN tOP tCP Body
     ;
 Type :
-     tINT
-    |tFLOAT
-    |tVOID
-    |tCHAR
+     tINT {$<INT>$ =INT_TYPE;}
+    |tFLOAT {$<INT>$ = FLOAT_TYPE;}
+    |tVOID {$<INT>$ = VOID_TYPE;}
+    |tCHAR {$<INT>$ =CHAR_TYPE;}
     ;
+
+//conv en float
 Val:
-  tINT_VAL
-| tFLOAT_VAL
-| tCHAR_VAL
+  tINT_VAL {$<FLOAT>$ =(float)$<INT>1}
+| tFLOAT_VAL {$<FLOAT>$ =$<FLOAT>1}
+| tCHAR_VAL {$<STR>$ =$<STR>1}
 ;
+
 
 Body :
       tOB Instruction tCB 
     ;
 
+//que entre même type
 Expression:
-    Val      { $$ = tempAddr;
-		printf("AFECTATION addr: %d value:%d ", tempAddr, $1);
+    tINT_VAL      { $<FLOAT>$ = (float)$<INT>1;
+		printf("[YACC AFF addr: %d value:%f ]", tempAddr, $<FLOAT>$);
 		tempAddr++;}
-  | Expression tPLUS Expression  { $$=$1+$3; operation("ADD", $1, $3);}
-  | Expression tMOINS Expression { $$=$1-$3; operation("SOU", $1, $3);}
-  | Expression tFOIS Expression  { $$=$1*$3; operation("MUL", $1, $3);}
-  | Expression tDIVISE Expression  { $$=$1/$3; operation("DIV", $1, $3);}
+  | tFLOAT_VAL { $<FLOAT>$ = $<FLOAT>1;
+		printf("[YACC AFF addr: %d value:%f ]", tempAddr, $<FLOAT>1);
+		tempAddr++;}
+  | tCHAR_VAL{ $<STR>$ = $<STR>1;
+		printf("[YACC AFF addr: %d value:%s ]", tempAddr, $<STR>1);
+		tempAddr++;}
+  | Expression tPLUS Expression  { $<FLOAT>$=$<FLOAT>1+$<FLOAT>3;operation("ADD", $<FLOAT>1, $<FLOAT>3);}
+  | Expression tMOINS Expression { $<FLOAT>$=$<FLOAT>1-$<FLOAT>3;operation("SOU", $<FLOAT>1, $<FLOAT>3);}
+  | Expression tFOIS Expression  { $<FLOAT>$=$<FLOAT>1*$<FLOAT>3; operation("MUL", $<FLOAT>1, $<FLOAT>3);}
+  | Expression tDIVISE Expression  { $<FLOAT>$=$<FLOAT>1/$<FLOAT>3; operation("DIV", $<FLOAT>1, $<FLOAT>3);}
   | tMOINS Expression {
-		$$ = tempAddr;
-		printf("COP %d 0", tempAddr);
-		printf("SOU %d %d %d", $$, tempAddr, $2);
+		$<FLOAT>$ = -$<FLOAT>2;
+		printf("[YACC COP %d 0 ]", tempAddr);
+		printf("[YACC SOU %d %d %f ]", tempAddr, tempAddr, $<FLOAT>2);
 		tempAddr++;
 	}        %prec tNEG  
-  | tOP Expression tCP  { $$=$2; }
+  | tOP Expression tCP  { $<FLOAT>$=$<FLOAT>2; }
   | tVAR	{/*^$$= value_of_variable_tVar */
-  		$$ = tempAddr;
-		int varAddr = getAdresse($1);
+  		$<FLOAT>$ = atof(getValeurToPrint($<STR>1));
+		int varAddr = getAdresse($<STR>1);
 		if(!varEstIni(varAddr)) {
 			printf("FATAL ERROR :unitialized variable");
 			exit(-1);
 		}
-		printf("COP %d %d", $$, varAddr);
+		printf("[YACC COP %f %d ]", $<FLOAT>$, varAddr);
 		tempAddr++; }
   ;
 Liste :
 	tVAR tCOMMA  {
-		ajouter($1, declaration_a_virg_last_type, false, false);
+		ajouter($<STR>1, declaration_a_virg_last_type, false, false);
   	} Liste
       | tVAR tVIRG  {
-		ajouter($1, declaration_a_virg_last_type, false, false);
+		ajouter($<STR>1, declaration_a_virg_last_type, false, false);
  	} Instruction
       ;
 
 Instruction:
   Type tVAR tEGAL Expression tVIRG {
-  		int varAddr =ajouter($2, $1, true,false);
-		printf("[YACC COP %d : %d ]", varAddr , $4);
+  		int varAddr =ajouter($<STR>2, $<INT>1, true,false);
+		if(isSymbolConst(varAddr)) {
+			printf("FATAL ERROR : const variable");
+			exit(-1);
+		}
+		if(!varEstIni(varAddr)) {
+			iniVar(varAddr);
+		}
+  		int type=$<INT>1;
+		if(type==FLOAT_TYPE || type==INT_TYPE){
+			setValeurFloat($<STR>2,(float)$<FLOAT>4);
+			printf("[YACC COP %d : %f ]", varAddr , (float)$<FLOAT>4);
+		}
+		else if(type==CHAR_TYPE){
+			setValeurStr($2,$<STR>4);
+			printf("[YACC COP %d : %s]", varAddr , $<STR>4);
+		}
   } Instruction
 | Type tCONST tVAR tEGAL Expression tVIRG {
-  		int varAddr = ajouter($3, $1, true,false);
-		printf("[YACC COP %d : %d ]", varAddr , $5);
+  		int varAddr = ajouter($3, $<INT>1, true,false);
+		int type=$<INT>1;
+		if(type==FLOAT_TYPE || type==INT_TYPE){
+			setValeurFloat($3,(float)$<FLOAT>5);
+			printf("[YACC COP %d : %f ]", varAddr , (float)$<FLOAT>5);
+		}
+		else if(type==CHAR_TYPE){
+			setValeurStr($3,$<STR>5);
+			printf("[YACC COP %d : %s]", varAddr , $<STR>5);
+		}
   } Instruction
 | Type tVAR tVIRG {
-		ajouter($2, $1, false, false);
+		ajouter($2, $<INT>1, false, false);
   } Instruction
 | Type tVAR tCOMMA {
-	declaration_a_virg_last_type= $1;
-	ajouter($2, $1, false, false);
+	declaration_a_virg_last_type= $<INT>1;
+	ajouter($2, $<INT>1, false, false);
   } Liste
 | tVAR tEGAL Expression tVIRG {
 	//printf("[YACC %s ]",$1);
-	int varAddr = getAdresse($1);
-	//$1.str  error: request for member 'str' in something not a structure or union
-	//$1 seul =>  Erreur fatale : pas de symbole "i =3;" dans la table		
+	int varAddr = getAdresse($1);		
 			if(isSymbolConst(varAddr)) {
 				printf("FATAL ERROR : const variable");
 				exit(-1);
@@ -135,9 +168,18 @@ Instruction:
 			if(!varEstIni(varAddr)) {
 				iniVar(varAddr);
 			}
-	printf("COP %d %d", varAddr, $3);
+		int type=getType($1);
+		if(type==FLOAT_TYPE || type==INT_TYPE){
+			setValeurFloat($1,$<FLOAT>3);
+			printf("[YACC COP %d %f ]", varAddr, $<FLOAT>3);
+		}
+		else if(type==CHAR_TYPE){
+			setValeurStr($1,$<STR>3);
+			printf("[YACC COP %d %f ]", varAddr, $<FLOAT>3);
+		}
+	
   }Instruction
-| tPRINTF tOP tVAR { printf(" [YACC la variable est : %s ]",$3); }tCP tVIRG Instruction 
+| tPRINTF tOP tVAR { printf(" [YACC la variable est : %s et vaut %s ]",$3, getValeurToPrint($3)); }tCP tVIRG Instruction 
 | tRETURN tVAR tVIRG
 | tRETURN Val tVIRG
 | tRETURN tOP tVAR tCP tVIRG

@@ -5,7 +5,7 @@
 #include "symboltable.h"
 
 #define SIZE 100
-
+#define MAX_VAR_SIZE 64
 struct ligne tab[SIZE];//malloc(sizeof(struct ligne)*100);
 int profondeur = 0;
 
@@ -47,7 +47,15 @@ void afficherTableSymboles() {
 
 }
 
-
+int getType(char *id) {
+	for (int i=profondeur - 1; i >= 0 ; i--) {
+		if (strcmp(id, tab[i].id)==0) {
+			return tab[i].type;
+		}
+	}
+	printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+	exit(-1);
+}
 int getAdresse(char *id) {
 	for (int i=profondeur - 1; i >= 0 ; i--) {
 		// Be carreful Hichem negative or positive, anything that's not a 0 is a true value in if
@@ -55,6 +63,84 @@ int getAdresse(char *id) {
 			return i;
 		}
 	}
+	printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+	exit(-1);
+}
+void setValeurStr(char* id, char* valeur){
+		bool found=false;
+	for (int i=profondeur - 1; i >= 0 ; i--) {
+			if (strcmp(id, tab[i].id)==0) {
+				found=true;
+				tab[i].valeur=malloc (sizeof (char) * strlen(valeur));
+				strncpy(tab[i].valeur,valeur, sizeof(tab[i].valeur));
+			}
+		}
+	if(!found){
+				printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+				exit(-1);
+		}
+}
+void setValeurFloat(char* id, float valeur){
+	char *buffer = malloc (sizeof (char) * MAX_VAR_SIZE);
+	snprintf(buffer, (sizeof (char) * MAX_VAR_SIZE), "%f", valeur);
+	bool found=false;
+	for (int i=profondeur - 1; i >= 0 ; i--) {
+			if (strcmp(id, tab[i].id)==0) {
+				found=true;
+				tab[i].valeur=malloc (sizeof (char) * MAX_VAR_SIZE);
+				strncpy(tab[i].valeur,buffer,(sizeof (char) * MAX_VAR_SIZE));
+			}
+		}
+	if(!found){
+				printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+				exit(-1);
+		}
+}
+/*
+void setValeurInt(char* id, int valeur){
+	char *buffer = malloc (sizeof (char) * 64);
+	snprintf(buffer, sizeof buffer, "%d", valeur);
+	bool found=false;
+	//printf("HERRRRRRRRRRRRRRRRRRR  + %s + %d",buffer,valeur);
+	for (int i=profondeur - 1; i >= 0 ; i--) {
+			if (strcmp(id, tab[i].id)==0) {
+				//printf(" \n \n FOUND + i : %d id: %s tabid: %s ",i,id,tab[i].id);
+				found=true;
+				tab[i].valeur=malloc (sizeof (char) * strlen(buffer));
+				strncpy(tab[i].valeur,buffer,sizeof(tab[i].valeur));
+			}
+		}
+		if(!found){
+			printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+			exit(-1);
+		}
+}
+void setValeur(char* id, void* valeur){
+	char *buffer = malloc (sizeof (char) * 64);
+	for (int i=profondeur - 1; i >= 0 ; i--) {
+			if (strcmp(id, tab[i].id)==0) {
+				if(tab[i].type == INT_TYPE){
+					snprintf(buffer, sizeof buffer, "%d", *(int*)valeur);
+					strncpy(tab[i].valeur,buffer, strlen(buffer));
+				}else if(tab[i].type == FLOAT_TYPE){
+					snprintf(buffer, sizeof buffer, "%f", *(float*)valeur);
+					strncpy(tab[i].valeur,buffer, strlen(buffer));
+				}else if(tab[i].type == CHAR_TYPE){
+					strncpy(tab[i].valeur,(char*)valeur, strlen(buffer));
+				}
+			}
+		}
+	printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+	exit(-1);
+}*/
+char* getValeurToPrint(char* id){
+	char *buffer = malloc (sizeof (char) * MAX_VAR_SIZE);
+	for (int i=profondeur - 1; i >= 0 ; i--) {
+				if (strcmp(id, tab[i].id)==0) {
+						snprintf(buffer, MAX_VAR_SIZE, "%s", tab[i].valeur);
+						return buffer;
+				}
+			}
 	printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
 	exit(-1);
 }
