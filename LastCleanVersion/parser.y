@@ -104,7 +104,7 @@ Expression:
   		$<FLOAT>$ = atof(getValeurToPrint($<STR>1));
 		int varAddr = getAdresse($<STR>1);
 		if(!varEstIni(varAddr)) {
-			printf("FATAL ERROR :unitialized variable");
+			printf(" \033[01;31m FATAL ERROR :unitialized variable \033[0m");
 			exit(-1);
 		}
 		printf("[YACC COP %f %d ]", $<FLOAT>$, varAddr);
@@ -112,20 +112,28 @@ Expression:
   ;
 Liste :
 	tVAR tCOMMA  {
+		if(alreadyDeclaredVar($<STR>1)) {
+				printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
+				exit(-1);
+		}
 		ajouter($<STR>1, declaration_a_virg_last_type, false, false);
   	} Liste
       | tVAR tVIRG  {
+      		if(alreadyDeclaredVar($<STR>1)) {
+					printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
+					exit(-1);
+		}
 		ajouter($<STR>1, declaration_a_virg_last_type, false, false);
  	} Instruction
       ;
 
 Instruction:
   Type tVAR tEGAL Expression tVIRG {
-  		int varAddr =ajouter($<STR>2, $<INT>1, true,false);
-		if(isSymbolConst(varAddr)) {
-			printf("FATAL ERROR : const variable");
+		if(alreadyDeclaredVar($<STR>2)) {
+			printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
 			exit(-1);
 		}
+		int varAddr =ajouter($<STR>2, $<INT>1, true,false);
 		if(!varEstIni(varAddr)) {
 			iniVar(varAddr);
 		}
@@ -140,7 +148,11 @@ Instruction:
 		}
   } Instruction
 | Type tCONST tVAR tEGAL Expression tVIRG {
-  		int varAddr = ajouter($3, $<INT>1, true,false);
+		if(alreadyDeclaredVar($<STR>3)) {
+			printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
+			exit(-1);
+		}
+  		int varAddr = ajouter($3, $<INT>1, true,true);//cst
 		int type=$<INT>1;
 		if(type==FLOAT_TYPE || type==INT_TYPE){
 			setValeurFloat($3,(float)$<FLOAT>5);
@@ -151,10 +163,34 @@ Instruction:
 			printf("[YACC COP %d : %s]", varAddr , $<STR>5);
 		}
   } Instruction
+ | tCONST Type tVAR tEGAL Expression tVIRG {
+ 		if(alreadyDeclaredVar($<STR>3)) {
+					printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
+					exit(-1);
+		}
+    		int varAddr = ajouter($3, $<INT>2, true,true);
+  		int type=$<INT>2;
+  		if(type==FLOAT_TYPE || type==INT_TYPE){
+  			setValeurFloat($3,(float)$<FLOAT>5);
+  			printf("[YACC COP %d : %f ]", varAddr , (float)$<FLOAT>5);
+  		}
+  		else if(type==CHAR_TYPE){
+  			setValeurStr($3,$<STR>5);
+  			printf("[YACC COP %d : %s]", varAddr , $<STR>5);
+  		}
+  } Instruction
 | Type tVAR tVIRG {
+		if(alreadyDeclaredVar($<STR>2)) {
+					printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
+					exit(-1);
+		}
 		ajouter($2, $<INT>1, false, false);
   } Instruction
 | Type tVAR tCOMMA {
+	if(alreadyDeclaredVar($<STR>2)) {
+				printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
+				exit(-1);
+	}
 	declaration_a_virg_last_type= $<INT>1;
 	ajouter($2, $<INT>1, false, false);
   } Liste
@@ -162,7 +198,7 @@ Instruction:
 	//printf("[YACC %s ]",$1);
 	int varAddr = getAdresse($1);		
 			if(isSymbolConst(varAddr)) {
-				printf("FATAL ERROR : const variable");
+				printf("\033[01;31m FATAL ERROR : const variable cannot reaffect value \033[0m");
 				exit(-1);
 			}
 			if(!varEstIni(varAddr)) {

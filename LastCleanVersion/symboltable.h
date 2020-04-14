@@ -7,7 +7,7 @@
 struct ligne
 {
   char id[16]; //nom de la var
-  int type; //type de var -- 5 ou 8  ?
+  int type; //type de var
   int init;
   char* valeur;//conversion selon le type ensuite
   int depth; //profondeur
@@ -34,7 +34,7 @@ void setValeurFloat(char* symbole, float valeur);
 //void setValeurInt(char* symbole, int valeur);
 //void setValeur(char* symbole, void* valeur);
 char* getValeurToPrint(char* symbole);
-
+bool alreadyDeclaredVar(char* symbole);
 int getIndice();
 bool varEstIni(int addr);
 void iniVar(int addr);

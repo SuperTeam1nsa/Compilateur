@@ -46,14 +46,21 @@ void afficherTableSymboles() {
 	}
 
 }
-
+bool alreadyDeclaredVar(char* id){
+	for (int i=profondeur - 1; i >= 0 ; i--) {
+			if (strcmp(id, tab[i].id)==0) {
+				return true;
+			}
+		}
+	return false;
+}
 int getType(char *id) {
 	for (int i=profondeur - 1; i >= 0 ; i--) {
 		if (strcmp(id, tab[i].id)==0) {
 			return tab[i].type;
 		}
 	}
-	printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+	printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? \033[0m", id);
 	exit(-1);
 }
 int getAdresse(char *id) {
@@ -63,7 +70,7 @@ int getAdresse(char *id) {
 			return i;
 		}
 	}
-	printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+	printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? \033[0m", id);
 	exit(-1);
 }
 void setValeurStr(char* id, char* valeur){
@@ -76,7 +83,7 @@ void setValeurStr(char* id, char* valeur){
 			}
 		}
 	if(!found){
-				printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+				printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ?\033[0m", id);
 				exit(-1);
 		}
 }
@@ -92,7 +99,7 @@ void setValeurFloat(char* id, float valeur){
 			}
 		}
 	if(!found){
-				printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+				printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? \033[0m", id);
 				exit(-1);
 		}
 }
@@ -141,7 +148,7 @@ char* getValeurToPrint(char* id){
 						return buffer;
 				}
 			}
-	printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
+	printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? \033[0m", id);
 	exit(-1);
 }
 
@@ -174,17 +181,17 @@ int ajouterTmp (float type){
 	return profondeur++;
 }
 
-//check if var à cette adresse est initialisée
+//check if var Ã  cette adresse est initialisÃ©e
 bool varEstIni(int addr) {
 	if(addr <= profondeur)
 		return tab[addr].init;
 	else{
-		printf("Variable non déclarée ! Surement pas initialise de facto :p ");
+		printf("\033[01;31m Variable non dÃ©clarÃ©e ! Surement pas initialise de facto :p \033[0m");
 		exit(-1);
 	}
 }
 
-//quand on affecte une valeur à la variable on appelle cette fonction pour dire ok ini
+//quand on affecte une valeur Ã  la variable on appelle cette fonction pour dire ok ini
 void iniVar(int addr) {
 	tab[addr].init = true;
 }
