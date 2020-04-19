@@ -17,17 +17,22 @@ Features support tests :
 *  gestion des espaces, tab, retour à la ligne
 *  gestion de printf(var) qui affiche le nom de la variable et sa valeur
 *  gestion des opérations arithmétiques standards( +-/*) et des priorités entre elles ainsi que des parenthèses
+*  gestion des return
+*  gestion des operateurs rapides (non imbriques) (++/--)
 
 Erreur tests réalisés:  
 *  const reaffectation => Fatal error
-*  char +1 character => warning
+*  char de plus de un character (va etre tronque) => warning
+*  return uninitialized var => warning
+*  return sur une void function => warning
+*  no return on a non-void function => warning
+*  more than one return in a function (without conditional jump #dead code) => warning
 *  declaration du même nom de variable 2 fois => fatal error
+*  ++/-- sur autre chose qu'un int/float  => fatal error
+*  ++/-- on unintialized var =>   fatal error
 
-TODO errors :
-*  non initialise: test en gérant var++
-*  coherence des types dans l'affectation => warning quand int prend la valeur d'un float
 
 TODO features :
-*  int a, b; a = b = 10; 
-*  int a, b = 10, c = 20;
-*  gestion des return (cf sujet voir ce qu'il faut implémenter )
+*   token de comparaison (renvoie un boolean): tCOMPARAISON tINFSTRICT tSUPSTRICT tSUPEGAL tINFEGAL tDIFF
+*   finir interpreteur lex/yacc assembleur
+

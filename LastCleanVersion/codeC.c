@@ -10,12 +10,13 @@ zz
 1;
 int const bob=2;
 const char lettre='a';
-i=4;
-i =3;
+i=5;
+i =4;
+i++;i--;
 j=4;
 k=8;
 printf (i);
-r=(i+j)*(i+k/j);
+r=-(i+j)*(i+k/j)+-1-1;
 printf ( r );
 
 return 0;
