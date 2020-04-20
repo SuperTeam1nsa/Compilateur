@@ -1,5 +1,5 @@
 %{
-    #include "y.tab.h"
+    #include "simulator.tab.h"
 %}
 
 vSEP    [ \t\r\n]
@@ -18,7 +18,7 @@ INF {return tINF;}
 SUP {return tSUP;}
 EQU {return tEQU;}
 PRI {return tPRI;}
-
+RETURN {return tRETURN;}
 -?[0-9]+  {
         yylval.nb = atoi(yytext);
         return tNB;

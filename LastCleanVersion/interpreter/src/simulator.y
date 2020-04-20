@@ -12,7 +12,7 @@
     int nb;
 }
 
-%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tEQU tPRI
+%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tEQU tPRI tRETURN
 
 %token <nb> tNB
 
@@ -53,6 +53,8 @@ Instruction:
         {asm_add_3(EQU, $2, $3, $4);}
     | tPRI tNB
         {asm_add_1(PRI, $2);}
+    | tRETURN tNB
+        {asm_add_1(RET, $2);}
     ;
 
 
@@ -60,7 +62,7 @@ Instruction:
 
 void yyerror(char* str) {
     extern int yylineno;
-    fprintf(stderr, "ERROR yyparse : Line %d: %s\n", yylineno, str);
+    fprintf(stderr, "ERROR yyparse : %s\n", str);
 }
 
 int main(int argc, char *argv[]) {

@@ -44,14 +44,14 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 "printf" {printf("tPRINTF ");return(tPRINTF);}
 "return" { printf("tRETURN ");return(tRETURN);}
 "const" { printf("tCONST ");return(tCONST);}
-{entier} {printf("tINT_VAL ");yylval.INT = atoi(yytext);return(tINT_VAL);}
-{float} {printf("tFLOAT_VAL ");yylval.FLOAT= atof(yytext);return(tFLOAT_VAL);}
-{reel}    {printf("tFLOAT_VAL ");yylval.FLOAT= atof(yytext);return(tFLOAT_VAL);}
+{entier} {printf("tINT_VAL ");yylval.s.INT = atoi(yytext);return(tINT_VAL);}
+{float} {printf("tFLOAT_VAL ");yylval.s.FLOAT= atof(yytext);return(tFLOAT_VAL);}
+{reel}    {printf("tFLOAT_VAL ");yylval.s.FLOAT= atof(yytext);return(tFLOAT_VAL);}
 {char} {printf("tCHAR_VAL "); if(strlen(yytext)>3) {
 					printf("\033[01;33m"" [LEXER overflow warning: char must be only one character ]\033[0m");// \033[01;31m = rouge liste des codes :http://web.theurbanpenguin.com/adding-color-to-your-output-from-c/
 			      }
-			      yylval.STR=my_strdup((char[2]) { (char) yytext[1], '\0' });return(tCHAR_VAL);}
-{nom_variable} {printf("tVAR [LEXER :%s] ",yytext);yylval.STR=my_strdup(yytext); return(tVAR);}
+			      yylval.s.STR=my_strdup((char[2]) { (char) yytext[1], '\0' });return(tCHAR_VAL);}
+{nom_variable} {printf("tVAR [LEXER :%s] ",yytext);yylval.s.STR=my_strdup(yytext); return(tVAR);}
  .	       printf( "[LEXER WARNING Unrecognized character: %s ]", yytext );
 
 %%

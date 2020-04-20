@@ -24,11 +24,11 @@ Erreur tests réalisés:
 *  const reaffectation => Fatal error
 *  char de plus de un character (va etre tronque) => warning
 *  return uninitialized var => warning
-*  return sur une void function => warning
+*  return sur une void function => fatal error
 *  no return on a non-void function => warning
 *  more than one return in a function (without conditional jump #dead code) => warning
 *  declaration du même nom de variable 2 fois => fatal error
-*  ++/-- sur autre chose qu'un int/float  => fatal error
+*  ++/-- sur autre chose qu'un int/float ou un const => fatal error
 *  ++/-- on unintialized var =>   fatal error
 
 
