@@ -1,6 +1,6 @@
 #ifndef __INSTRUCTIONS_H__
 #define __INSTRUCTIONS_H__
-
+//rq: avec bison avant on aurait pu faire une union et juste retourner la val du token dans
 #define ADD 1
 #define MUL 2
 #define SOU 3
@@ -11,9 +11,13 @@
 #define JMF 8
 #define INF 9
 #define SUP 10
-#define EQU 11
+#define CMP 11
 #define PRI 12
 #define RET 13
+#define DIF 14
+#define NOT 15
+#define SUE 16
+#define INE 17
 
 #define MAX_INSTRUCTIONS_SIZE 256
 #define MAX_MEMORY_SIZE 256

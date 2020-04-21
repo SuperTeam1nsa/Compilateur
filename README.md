@@ -19,6 +19,7 @@ Features support tests :
 *  gestion des opérations arithmétiques standards( +-/*) et des priorités entre elles ainsi que des parenthèses
 *  gestion des return
 *  gestion des operateurs rapides (non imbriques) (++/--)
+*  supporte les comparaisons (<,>,>=,<=,!,!=,==) en renvoyant un entier 0 ou 1 (vrai) conformément au sujet (pas de check de type => use parenthesis for negative value)
 
 Erreur tests réalisés:  
 *  const reaffectation => Fatal error
@@ -32,7 +33,4 @@ Erreur tests réalisés:
 *  ++/-- on unintialized var =>   fatal error
 
 
-TODO features :
-*   token de comparaison (renvoie un boolean): tCOMPARAISON tINFSTRICT tSUPSTRICT tSUPEGAL tINFEGAL tDIFF
-*   finir interpreteur lex/yacc assembleur
 

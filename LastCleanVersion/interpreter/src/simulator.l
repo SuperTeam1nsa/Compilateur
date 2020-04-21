@@ -16,9 +16,13 @@ JMP {return tJMP;}
 JMF {return tJMF;}
 INF {return tINF;}
 SUP {return tSUP;}
-EQU {return tEQU;}
+CMP {return tCMP;}
+SUE {return tSUE;}
+INE {return tINE;}
+NOT {return tNOT;}
+DIF {return tDIF;}
 PRI {return tPRI;}
-RETURN {return tRETURN;}
+RET {return tRET;}
 -?[0-9]+  {
         yylval.nb = atoi(yytext);
         return tNB;

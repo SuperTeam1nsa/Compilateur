@@ -49,10 +49,14 @@
      tJMF = 265,
      tINF = 266,
      tSUP = 267,
-     tEQU = 268,
-     tPRI = 269,
-     tRETURN = 270,
-     tNB = 271
+     tCMP = 268,
+     tSUE = 269,
+     tINE = 270,
+     tDIF = 271,
+     tNOT = 272,
+     tPRI = 273,
+     tRET = 274,
+     tNB = 275
    };
 #endif
 
@@ -70,7 +74,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 74 "simulator.tab.h"
+#line 78 "simulator.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

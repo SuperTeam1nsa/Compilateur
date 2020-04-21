@@ -16,10 +16,14 @@ Grammaire
    10            | tJMP tNB
    11            | tJMF tNB tNB
    12            | tINF tNB tNB tNB
-   13            | tSUP tNB tNB tNB
-   14            | tEQU tNB tNB tNB
-   15            | tPRI tNB
-   16            | tRETURN tNB
+   13            | tINE tNB tNB tNB
+   14            | tSUE tNB tNB tNB
+   15            | tDIF tNB tNB tNB
+   16            | tNOT tNB tNB tNB
+   17            | tSUP tNB tNB tNB
+   18            | tCMP tNB tNB tNB
+   19            | tPRI tNB
+   20            | tRET tNB
 
 
 Terminaux, suivis des règles où ils apparaissent
@@ -35,23 +39,28 @@ tAFC (263) 9
 tJMP (264) 10
 tJMF (265) 11
 tINF (266) 12
-tSUP (267) 13
-tEQU (268) 14
-tPRI (269) 15
-tRETURN (270) 16
-tNB (271) 4 5 6 7 8 9 10 11 12 13 14 15 16
+tSUP (267) 17
+tCMP (268) 18
+tSUE (269) 14
+tINE (270) 13
+tDIF (271) 15
+tNOT (272) 16
+tPRI (273) 19
+tRET (274) 20
+tNB (275) 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 
 
 Non-terminaux, suivis des règles où ils apparaissent
 
-$accept (17)
+$accept (21)
     à gauche: 0
-File (18)
+File (22)
     à gauche: 1, à droite: 0
-Instructions (19)
+Instructions (23)
     à gauche: 2 3, à droite: 1 3
-Instruction (20)
-    à gauche: 4 5 6 7 8 9 10 11 12 13 14 15 16, à droite: 3
+Instruction (24)
+    à gauche: 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20, à droite:
+    3
 
 
 état 0
@@ -76,23 +85,27 @@ Instruction (20)
     1 File: Instructions .
     3 Instructions: Instructions . Instruction
 
-    tADD     décalage et aller à l'état 4
-    tMUL     décalage et aller à l'état 5
-    tSOU     décalage et aller à l'état 6
-    tDIV     décalage et aller à l'état 7
-    tCOP     décalage et aller à l'état 8
-    tAFC     décalage et aller à l'état 9
-    tJMP     décalage et aller à l'état 10
-    tJMF     décalage et aller à l'état 11
-    tINF     décalage et aller à l'état 12
-    tSUP     décalage et aller à l'état 13
-    tEQU     décalage et aller à l'état 14
-    tPRI     décalage et aller à l'état 15
-    tRETURN  décalage et aller à l'état 16
+    tADD  décalage et aller à l'état 4
+    tMUL  décalage et aller à l'état 5
+    tSOU  décalage et aller à l'état 6
+    tDIV  décalage et aller à l'état 7
+    tCOP  décalage et aller à l'état 8
+    tAFC  décalage et aller à l'état 9
+    tJMP  décalage et aller à l'état 10
+    tJMF  décalage et aller à l'état 11
+    tINF  décalage et aller à l'état 12
+    tSUP  décalage et aller à l'état 13
+    tCMP  décalage et aller à l'état 14
+    tSUE  décalage et aller à l'état 15
+    tINE  décalage et aller à l'état 16
+    tDIF  décalage et aller à l'état 17
+    tNOT  décalage et aller à l'état 18
+    tPRI  décalage et aller à l'état 19
+    tRET  décalage et aller à l'état 20
 
     $défaut  réduction par utilisation de la règle 1 (File)
 
-    Instruction  aller à l'état 17
+    Instruction  aller à l'état 21
 
 
 état 3
@@ -106,305 +119,417 @@ Instruction (20)
 
     4 Instruction: tADD . tNB tNB tNB
 
-    tNB  décalage et aller à l'état 18
+    tNB  décalage et aller à l'état 22
 
 
 état 5
 
     5 Instruction: tMUL . tNB tNB tNB
 
-    tNB  décalage et aller à l'état 19
+    tNB  décalage et aller à l'état 23
 
 
 état 6
 
     6 Instruction: tSOU . tNB tNB tNB
 
-    tNB  décalage et aller à l'état 20
+    tNB  décalage et aller à l'état 24
 
 
 état 7
 
     7 Instruction: tDIV . tNB tNB tNB
 
-    tNB  décalage et aller à l'état 21
+    tNB  décalage et aller à l'état 25
 
 
 état 8
 
     8 Instruction: tCOP . tNB tNB
 
-    tNB  décalage et aller à l'état 22
+    tNB  décalage et aller à l'état 26
 
 
 état 9
 
     9 Instruction: tAFC . tNB tNB
 
-    tNB  décalage et aller à l'état 23
+    tNB  décalage et aller à l'état 27
 
 
 état 10
 
    10 Instruction: tJMP . tNB
 
-    tNB  décalage et aller à l'état 24
+    tNB  décalage et aller à l'état 28
 
 
 état 11
 
    11 Instruction: tJMF . tNB tNB
 
-    tNB  décalage et aller à l'état 25
+    tNB  décalage et aller à l'état 29
 
 
 état 12
 
    12 Instruction: tINF . tNB tNB tNB
 
-    tNB  décalage et aller à l'état 26
+    tNB  décalage et aller à l'état 30
 
 
 état 13
 
-   13 Instruction: tSUP . tNB tNB tNB
+   17 Instruction: tSUP . tNB tNB tNB
 
-    tNB  décalage et aller à l'état 27
+    tNB  décalage et aller à l'état 31
 
 
 état 14
 
-   14 Instruction: tEQU . tNB tNB tNB
+   18 Instruction: tCMP . tNB tNB tNB
 
-    tNB  décalage et aller à l'état 28
+    tNB  décalage et aller à l'état 32
 
 
 état 15
 
-   15 Instruction: tPRI . tNB
+   14 Instruction: tSUE . tNB tNB tNB
 
-    tNB  décalage et aller à l'état 29
+    tNB  décalage et aller à l'état 33
 
 
 état 16
 
-   16 Instruction: tRETURN . tNB
+   13 Instruction: tINE . tNB tNB tNB
 
-    tNB  décalage et aller à l'état 30
+    tNB  décalage et aller à l'état 34
 
 
 état 17
+
+   15 Instruction: tDIF . tNB tNB tNB
+
+    tNB  décalage et aller à l'état 35
+
+
+état 18
+
+   16 Instruction: tNOT . tNB tNB tNB
+
+    tNB  décalage et aller à l'état 36
+
+
+état 19
+
+   19 Instruction: tPRI . tNB
+
+    tNB  décalage et aller à l'état 37
+
+
+état 20
+
+   20 Instruction: tRET . tNB
+
+    tNB  décalage et aller à l'état 38
+
+
+état 21
 
     3 Instructions: Instructions Instruction .
 
     $défaut  réduction par utilisation de la règle 3 (Instructions)
 
 
-état 18
+état 22
 
     4 Instruction: tADD tNB . tNB tNB
 
-    tNB  décalage et aller à l'état 31
-
-
-état 19
-
-    5 Instruction: tMUL tNB . tNB tNB
-
-    tNB  décalage et aller à l'état 32
-
-
-état 20
-
-    6 Instruction: tSOU tNB . tNB tNB
-
-    tNB  décalage et aller à l'état 33
-
-
-état 21
-
-    7 Instruction: tDIV tNB . tNB tNB
-
-    tNB  décalage et aller à l'état 34
-
-
-état 22
-
-    8 Instruction: tCOP tNB . tNB
-
-    tNB  décalage et aller à l'état 35
+    tNB  décalage et aller à l'état 39
 
 
 état 23
 
-    9 Instruction: tAFC tNB . tNB
+    5 Instruction: tMUL tNB . tNB tNB
 
-    tNB  décalage et aller à l'état 36
+    tNB  décalage et aller à l'état 40
 
 
 état 24
+
+    6 Instruction: tSOU tNB . tNB tNB
+
+    tNB  décalage et aller à l'état 41
+
+
+état 25
+
+    7 Instruction: tDIV tNB . tNB tNB
+
+    tNB  décalage et aller à l'état 42
+
+
+état 26
+
+    8 Instruction: tCOP tNB . tNB
+
+    tNB  décalage et aller à l'état 43
+
+
+état 27
+
+    9 Instruction: tAFC tNB . tNB
+
+    tNB  décalage et aller à l'état 44
+
+
+état 28
 
    10 Instruction: tJMP tNB .
 
     $défaut  réduction par utilisation de la règle 10 (Instruction)
 
 
-état 25
+état 29
 
    11 Instruction: tJMF tNB . tNB
 
-    tNB  décalage et aller à l'état 37
-
-
-état 26
-
-   12 Instruction: tINF tNB . tNB tNB
-
-    tNB  décalage et aller à l'état 38
-
-
-état 27
-
-   13 Instruction: tSUP tNB . tNB tNB
-
-    tNB  décalage et aller à l'état 39
-
-
-état 28
-
-   14 Instruction: tEQU tNB . tNB tNB
-
-    tNB  décalage et aller à l'état 40
-
-
-état 29
-
-   15 Instruction: tPRI tNB .
-
-    $défaut  réduction par utilisation de la règle 15 (Instruction)
+    tNB  décalage et aller à l'état 45
 
 
 état 30
 
-   16 Instruction: tRETURN tNB .
+   12 Instruction: tINF tNB . tNB tNB
 
-    $défaut  réduction par utilisation de la règle 16 (Instruction)
+    tNB  décalage et aller à l'état 46
 
 
 état 31
 
-    4 Instruction: tADD tNB tNB . tNB
+   17 Instruction: tSUP tNB . tNB tNB
 
-    tNB  décalage et aller à l'état 41
+    tNB  décalage et aller à l'état 47
 
 
 état 32
 
-    5 Instruction: tMUL tNB tNB . tNB
+   18 Instruction: tCMP tNB . tNB tNB
 
-    tNB  décalage et aller à l'état 42
+    tNB  décalage et aller à l'état 48
 
 
 état 33
 
-    6 Instruction: tSOU tNB tNB . tNB
+   14 Instruction: tSUE tNB . tNB tNB
 
-    tNB  décalage et aller à l'état 43
+    tNB  décalage et aller à l'état 49
 
 
 état 34
 
-    7 Instruction: tDIV tNB tNB . tNB
+   13 Instruction: tINE tNB . tNB tNB
 
-    tNB  décalage et aller à l'état 44
+    tNB  décalage et aller à l'état 50
 
 
 état 35
+
+   15 Instruction: tDIF tNB . tNB tNB
+
+    tNB  décalage et aller à l'état 51
+
+
+état 36
+
+   16 Instruction: tNOT tNB . tNB tNB
+
+    tNB  décalage et aller à l'état 52
+
+
+état 37
+
+   19 Instruction: tPRI tNB .
+
+    $défaut  réduction par utilisation de la règle 19 (Instruction)
+
+
+état 38
+
+   20 Instruction: tRET tNB .
+
+    $défaut  réduction par utilisation de la règle 20 (Instruction)
+
+
+état 39
+
+    4 Instruction: tADD tNB tNB . tNB
+
+    tNB  décalage et aller à l'état 53
+
+
+état 40
+
+    5 Instruction: tMUL tNB tNB . tNB
+
+    tNB  décalage et aller à l'état 54
+
+
+état 41
+
+    6 Instruction: tSOU tNB tNB . tNB
+
+    tNB  décalage et aller à l'état 55
+
+
+état 42
+
+    7 Instruction: tDIV tNB tNB . tNB
+
+    tNB  décalage et aller à l'état 56
+
+
+état 43
 
     8 Instruction: tCOP tNB tNB .
 
     $défaut  réduction par utilisation de la règle 8 (Instruction)
 
 
-état 36
+état 44
 
     9 Instruction: tAFC tNB tNB .
 
     $défaut  réduction par utilisation de la règle 9 (Instruction)
 
 
-état 37
+état 45
 
    11 Instruction: tJMF tNB tNB .
 
     $défaut  réduction par utilisation de la règle 11 (Instruction)
 
 
-état 38
+état 46
 
    12 Instruction: tINF tNB tNB . tNB
 
-    tNB  décalage et aller à l'état 45
+    tNB  décalage et aller à l'état 57
 
 
-état 39
+état 47
 
-   13 Instruction: tSUP tNB tNB . tNB
+   17 Instruction: tSUP tNB tNB . tNB
 
-    tNB  décalage et aller à l'état 46
-
-
-état 40
-
-   14 Instruction: tEQU tNB tNB . tNB
-
-    tNB  décalage et aller à l'état 47
+    tNB  décalage et aller à l'état 58
 
 
-état 41
+état 48
+
+   18 Instruction: tCMP tNB tNB . tNB
+
+    tNB  décalage et aller à l'état 59
+
+
+état 49
+
+   14 Instruction: tSUE tNB tNB . tNB
+
+    tNB  décalage et aller à l'état 60
+
+
+état 50
+
+   13 Instruction: tINE tNB tNB . tNB
+
+    tNB  décalage et aller à l'état 61
+
+
+état 51
+
+   15 Instruction: tDIF tNB tNB . tNB
+
+    tNB  décalage et aller à l'état 62
+
+
+état 52
+
+   16 Instruction: tNOT tNB tNB . tNB
+
+    tNB  décalage et aller à l'état 63
+
+
+état 53
 
     4 Instruction: tADD tNB tNB tNB .
 
     $défaut  réduction par utilisation de la règle 4 (Instruction)
 
 
-état 42
+état 54
 
     5 Instruction: tMUL tNB tNB tNB .
 
     $défaut  réduction par utilisation de la règle 5 (Instruction)
 
 
-état 43
+état 55
 
     6 Instruction: tSOU tNB tNB tNB .
 
     $défaut  réduction par utilisation de la règle 6 (Instruction)
 
 
-état 44
+état 56
 
     7 Instruction: tDIV tNB tNB tNB .
 
     $défaut  réduction par utilisation de la règle 7 (Instruction)
 
 
-état 45
+état 57
 
    12 Instruction: tINF tNB tNB tNB .
 
     $défaut  réduction par utilisation de la règle 12 (Instruction)
 
 
-état 46
+état 58
 
-   13 Instruction: tSUP tNB tNB tNB .
+   17 Instruction: tSUP tNB tNB tNB .
+
+    $défaut  réduction par utilisation de la règle 17 (Instruction)
+
+
+état 59
+
+   18 Instruction: tCMP tNB tNB tNB .
+
+    $défaut  réduction par utilisation de la règle 18 (Instruction)
+
+
+état 60
+
+   14 Instruction: tSUE tNB tNB tNB .
+
+    $défaut  réduction par utilisation de la règle 14 (Instruction)
+
+
+état 61
+
+   13 Instruction: tINE tNB tNB tNB .
 
     $défaut  réduction par utilisation de la règle 13 (Instruction)
 
 
-état 47
+état 62
 
-   14 Instruction: tEQU tNB tNB tNB .
+   15 Instruction: tDIF tNB tNB tNB .
 
-    $défaut  réduction par utilisation de la règle 14 (Instruction)
+    $défaut  réduction par utilisation de la règle 15 (Instruction)
+
+
+état 63
+
+   16 Instruction: tNOT tNB tNB tNB .
+
+    $défaut  réduction par utilisation de la règle 16 (Instruction)

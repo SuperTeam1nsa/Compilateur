@@ -35,6 +35,7 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 ">="  {printf("tSUPEGAL "); return(tSUPEGAL);}
 "<="  {printf("tINFEGAL "); return(tINFEGAL);}
 "!="  {printf("tDIFF "); return(tDIFF);}
+"!"  {printf("tNOT "); return(tNOT);}
 "int" {printf("tINT ");/*yylval.str = strdup(yytext);*/ return tINT ; }
 "float" {printf("tFLOAT ");return(tFLOAT);}
 "void" {printf("tVOID ");return(tVOID);}

@@ -128,12 +128,28 @@ int exec(int ip) {
         memory[arg1] = memory[arg2] < memory[arg3] ? 1 : 0;
         break;
     case SUP:
-        printf("INF @%d = @%d[%d] > @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
+        printf("SUP @%d = @%d[%d] > @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
         memory[arg1] = memory[arg2] > memory[arg3] ? 1 : 0;
         break;
-    case EQU:
-        printf("INF @%d = @%d[%d] == @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
+    case CMP:
+        printf("CMP @%d = @%d[%d] == @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
         memory[arg1] = memory[arg2] ==  memory[arg3] ? 1 : 0;
+        break;
+    case SUE:
+		printf("SUE @%d = @%d[%d] == @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
+		memory[arg1] = memory[arg2] >=  memory[arg3] ? 1 : 0;
+        break;
+    case INE:
+		printf("CMP @%d = @%d[%d] == @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
+		memory[arg1] = memory[arg2] <=  memory[arg3] ? 1 : 0;
+        break;
+    case DIF:
+		printf("CMP @%d = @%d[%d] == @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
+		memory[arg1] = memory[arg2] !=  memory[arg3] ? 1 : 0;
+        break;
+    case NOT:
+		printf("CMP @%d = @%d[%d] == @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
+		memory[arg1] = memory[arg2]==0 ? 1 : 0;
         break;
     case PRI:
         printf("PRI @%d[%d]\n", arg1, memory[arg1]);

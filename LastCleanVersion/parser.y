@@ -46,7 +46,7 @@ void PrintfOperation(char *name, char* value, int addr){
 }
 void ReturnOperation(int addr, int value){
 	printf(" [YACC RETURN value: %d ]",value);
-	fprintf(file, "RETURN %d \n",addr);
+	fprintf(file, "RET %d \n",addr);
 }
 %}
 
@@ -128,6 +128,13 @@ Expression :
   | Expression tMOINS Expression { $<s>$.FLOAT=$<s>1.FLOAT-$<s>3.FLOAT;$<s>$.ADDR=tempAddr;operation("SOU",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
   | Expression tFOIS Expression  { $<s>$.FLOAT=$<s>1.FLOAT*$<s>3.FLOAT;$<s>$.ADDR=tempAddr; operation("MUL",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
   | Expression tDIVISE Expression  { $<s>$.FLOAT=$<s>1.FLOAT/$<s>3.FLOAT;$<s>$.ADDR=tempAddr; operation("DIV",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
+  | Expression tCOMPARAISON Expression  { $<s>$.FLOAT=($<s>1.FLOAT==$<s>3.FLOAT?1:0);$<s>$.ADDR=tempAddr; operation("CMP",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
+  | Expression tINFSTRICT Expression  { $<s>$.FLOAT=($<s>1.FLOAT < $<s>3.FLOAT?1:0);$<s>$.ADDR=tempAddr; operation("INF",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
+  | Expression tSUPSTRICT Expression  { $<s>$.FLOAT=($<s>1.FLOAT > $<s>3.FLOAT?1:0);$<s>$.ADDR=tempAddr; operation("SUP",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
+  | Expression tSUPEGAL Expression  { $<s>$.FLOAT=($<s>1.FLOAT >= $<s>3.FLOAT?1:0);$<s>$.ADDR=tempAddr; operation("SUE",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
+  | Expression tINFEGAL Expression  { $<s>$.FLOAT=($<s>1.FLOAT <= $<s>3.FLOAT?1:0);$<s>$.ADDR=tempAddr; operation("INE",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
+  | Expression tDIFF Expression  { $<s>$.FLOAT=($<s>1.FLOAT != $<s>3.FLOAT?1:0);$<s>$.ADDR=tempAddr; operation("DIF",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
+  | tNOT Expression  { $<s>$.FLOAT=($<s>1.FLOAT= ($<s>2.FLOAT==0)?1:0);$<s>$.ADDR=tempAddr; operation("NOT",tempAddr, $<s>1.ADDR, $<s>2.ADDR);tempAddr++;}
   | tMOINS Expression {
 		$<s>$.FLOAT = -$<s>2.FLOAT;
 		$<s>$.ADDR = tempAddr;

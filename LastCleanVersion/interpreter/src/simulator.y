@@ -12,7 +12,7 @@
     int nb;
 }
 
-%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tEQU tPRI tRETURN
+%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tCMP tSUE tINE tDIF tNOT tPRI tRET
 
 %token <nb> tNB
 
@@ -47,13 +47,21 @@ Instruction:
         {asm_add_2(JMF, $2, $3);}
     | tINF tNB tNB tNB
         {asm_add_3(INF, $2, $3, $4);}
+    | tINE tNB tNB tNB
+        {asm_add_3(INE, $2, $3, $4);}
+    | tSUE tNB tNB tNB
+        {asm_add_3(SUE, $2, $3, $4);}
+    | tDIF tNB tNB tNB
+        {asm_add_3(DIF, $2, $3, $4);}
+    | tNOT tNB tNB tNB
+        {asm_add_3(NOT, $2, $3, $4);}
     | tSUP tNB tNB tNB
         {asm_add_3(SUP, $2, $3, $4);}
-    | tEQU tNB tNB tNB
-        {asm_add_3(EQU, $2, $3, $4);}
+    | tCMP tNB tNB tNB
+        {asm_add_3(CMP, $2, $3, $4);}
     | tPRI tNB
         {asm_add_1(PRI, $2);}
-    | tRETURN tNB
+    | tRET tNB
         {asm_add_1(RET, $2);}
     ;
 
