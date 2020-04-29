@@ -36,6 +36,8 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 "<="  {printf("tINFEGAL "); return(tINFEGAL);}
 "!="  {printf("tDIFF "); return(tDIFF);}
 "!"  {printf("tNOT "); return(tNOT);}
+"if" {printf("tIF "); return(tIF);}
+"else" {printf("tELSE "); return(tELSE);}
 "int" {printf("tINT ");/*yylval.str = strdup(yytext);*/ return tINT ; }
 "float" {printf("tFLOAT ");return(tFLOAT);}
 "void" {printf("tVOID ");return(tVOID);}
@@ -45,13 +47,13 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 "printf" {printf("tPRINTF ");return(tPRINTF);}
 "return" { printf("tRETURN ");return(tRETURN);}
 "const" { printf("tCONST ");return(tCONST);}
-{entier} {printf("tINT_VAL ");yylval.s.INT = atoi(yytext);return(tINT_VAL);}
+{entier} {printf("tINT_VAL ");yylval.s.FLOAT = atoi(yytext);return(tINT_VAL);}
 {float} {printf("tFLOAT_VAL ");yylval.s.FLOAT= atof(yytext);return(tFLOAT_VAL);}
 {reel}    {printf("tFLOAT_VAL ");yylval.s.FLOAT= atof(yytext);return(tFLOAT_VAL);}
 {char} {printf("tCHAR_VAL "); if(strlen(yytext)>3) {
 					printf("\033[01;33m"" [LEXER overflow warning: char must be only one character ]\033[0m");// \033[01;31m = rouge liste des codes :http://web.theurbanpenguin.com/adding-color-to-your-output-from-c/
 			      }
-			      yylval.s.STR=my_strdup((char[2]) { (char) yytext[1], '\0' });return(tCHAR_VAL);}
+			      yylval.s.STR=my_strdup((char[2]) { (char) yytext[1], '\0' });yylval.s.FLOAT=(float)((char) yytext[1]);return(tCHAR_VAL);}
 {nom_variable} {printf("tVAR [LEXER :%s] ",yytext);yylval.s.STR=my_strdup(yytext); return(tVAR);}
  .	       printf( "[LEXER WARNING Unrecognized character: %s ]", yytext );
 

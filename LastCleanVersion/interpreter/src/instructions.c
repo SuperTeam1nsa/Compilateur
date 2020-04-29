@@ -119,9 +119,9 @@ int exec(int ip) {
     case JMP:
         printf("JMP to %d\n", arg1);
         next_ip = arg1; break;
-    case JMF:
-        printf("JMF cond@%d[%d] to %d\n", arg1, memory[arg1], arg2);
-        if (memory[arg1] == 0) next_ip = arg2;
+    case JMF://on check la valeur de la dernière value stockée (CMP X, DIFF X etc ) #en vrai ASM flag levé lors des comparaisons
+        printf("JMF cond@%d[%d] to %d\n", instructions[ip-1].arg1, memory[instructions[ip-1].arg1], arg1);
+        if (memory[instructions[ip-1].arg1] == 0) next_ip = arg1;
         break;
     case INF:
         printf("INF @%d = @%d[%d] < @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
@@ -144,7 +144,7 @@ int exec(int ip) {
 		memory[arg1] = memory[arg2] <=  memory[arg3] ? 1 : 0;
         break;
     case DIF:
-		printf("CMP @%d = @%d[%d] == @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
+		printf("DIF @%d = @%d[%d] != @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
 		memory[arg1] = memory[arg2] !=  memory[arg3] ? 1 : 0;
         break;
     case NOT:

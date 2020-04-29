@@ -33,7 +33,11 @@ int getIndice() {
 void decrementerIndice(){
 	profondeur--;
 }
-
+void freeAll(){
+	for (int i=0; i < profondeur ; i++) {
+			free(tab[i].valeur);
+	}
+}
 void afficherTableSymboles() {
 
 	printf("	               ***              \n");
@@ -63,10 +67,17 @@ int getType(char *id) {
 	printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? \033[0m", id);
 	exit(-1);
 }
-int getAdresse(char *id) {
+int getAdresse(char *id,int depth) {
 	for (int i=profondeur - 1; i >= 0 ; i--) {
-		// Be carreful Hichem negative or positive, anything that's not a 0 is a true value in if
+		//si le nom de la variable correspond
 		if (strcmp(id, tab[i].id)==0) {
+			//si on a declare la variable dans un if par exemple
+			if(tab[i].depth > depth)
+			{
+				printf("\033[01;31m Erreur fatale: la variable %s n'est pas accessible dans ce bloc, hint: check block declaration  \033[0m", id);
+				exit(-1);
+			}
+			else
 			return i;
 		}
 	}
@@ -102,6 +113,7 @@ void setValeurFloat(char* id, float valeur){
 				printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? \033[0m", id);
 				exit(-1);
 		}
+		free(buffer);
 }
 /*
 void setValeurInt(char* id, int valeur){
@@ -152,14 +164,14 @@ char* getValeurToPrint(char* id){
 	exit(-1);
 }
 
-int ajouter(char id[16], float type, int init, bool isConst) {
+int ajouter(char id[16], float type, int init, bool isConst, int depth) {
 
 	if (profondeur < 0 || profondeur >= SIZE) {
 		printf("Erreur ajouter TABLESYMBOL indice\n");
 		exit(1);
 	} else {
-		struct ligne newLine = { .id = "", .type = type, .init = init, .depth = profondeur, .isConst=isConst };
-		strcpy(newLine.id , id);
+		struct ligne newLine = { .id = "", .type = type, .init = init, .depth = depth, .isConst=isConst };
+		strncpy(newLine.id , id,16);
 		//strcpy(newLine.type , type);
 		tab[profondeur] = newLine ;
 		profondeur++;
@@ -167,31 +179,18 @@ int ajouter(char id[16], float type, int init, bool isConst) {
 	return profondeur;
 }
 
-///???
-int ajouterTmp (float type){
-	if (profondeur < 0 || profondeur >= SIZE) {
-		printf("Erreur ajouterTMP TABLESYMBOL indice pr\n");
-		exit(1);
-	} else {
-		struct ligne newLine = { .id = "#", .type = type, .init = 1, .depth = 0, .isConst=false};
-		//strcpy(newLine.id , id);
-		//strcpy(newLine.type , type);
-		tab[profondeur] = newLine ;
-	}
-	return profondeur++;
-}
 
-//check if var à cette adresse est initialisée
+//check if var Ã  cette adresse est initialisÃ©e
 bool varEstIni(int addr) {
 	if(addr <= profondeur)
 		return tab[addr].init;
 	else{
-		printf("\033[01;31m Variable non déclarée ! Surement pas initialise de facto :p \033[0m");
+		printf("\033[01;31m Variable non dÃ©clarÃ©e ! Surement pas initialise de facto :p \033[0m");
 		exit(-1);
 	}
 }
 
-//quand on affecte une valeur à la variable on appelle cette fonction pour dire ok ini
+//quand on affecte une valeur Ã  la variable on appelle cette fonction pour dire ok ini
 void iniVar(int addr) {
 	tab[addr].init = true;
 }

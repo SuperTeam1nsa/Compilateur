@@ -8,11 +8,23 @@
 #include <math.h>
 #include "symboltable.h"
 #define output "interpreter/output.asm"
+#define MAX_INSTRUCTIONS 1000
+#define SIZE_INSTRUCTION 30
+#define MAX_INSIDE_IF 10
+int OPTI;
 
 int tempAddr = 100;
 int success = 1; 
 int voidOrIntMain=0;//void by def
 int hasAreturn=0;
+char instruction[MAX_INSTRUCTIONS][SIZE_INSTRUCTION];
+int cp=0;
+int depth=0;
+int old_depth[MAX_INSIDE_IF];
+int jumpToPatch[MAX_INSIDE_IF];
+int lastJump=-1;
+int activeInstruction=1;
+int hasOneIf=0;
 
 char * type;
 FILE* file;
@@ -30,23 +42,69 @@ float declaration_a_virg_last_type;
 //value ou addr2
 //AFC ou COP
 void AutreOperation(const char * operation, int addr1,float value) {
+if(activeInstruction){
 	//l'ASM ne gère pas les float => écris à la int
 	printf("[YACC %s %d %f ]", operation, addr1, value);
-	fprintf(file, "%s %d %.0f \n",operation, addr1, value);
+	//fprintf(file, "%s %d %.0f \n",operation, addr1, value);
+	snprintf(instruction[cp],30,"%s %d %.0f \n",operation, addr1, value);
+	cp++;
+	}
 }
 //operation arithmetique
 void operation(const char * operation,int addresse_result, int addr1, int addr2) {
+if(activeInstruction){
 	printf("[YACC %s %d %d %d ]", operation,addresse_result, addr1, addr2);
-	fprintf(file, "%s %d %d %d \n",operation,addresse_result, addr1, addr2);
+	snprintf(instruction[cp],30,"%s %d %d %d \n",operation,addresse_result, addr1, addr2);
+	cp++;
+	}
 }
 
 void PrintfOperation(char *name, char* value, int addr){
 	printf(" [YACC PRINTF : la variable est : %s et vaut %s ]",name,value);
-	fprintf(file, "PRI %d \n",addr);
+	//fprintf(file, "PRI %d \n",addr);
+	snprintf(instruction[cp],30,"PRI %d \n",addr);
+	cp++;
+	free(value);
 }
 void ReturnOperation(int addr, int value){
 	printf(" [YACC RETURN value: %d ]",value);
-	fprintf(file, "RET %d \n",addr);
+	//fprintf(file, "RET %d \n",addr);
+	snprintf(instruction[cp],30,"RET %d \n",addr);
+	cp++;
+}
+//rq if else <=> if if (avec deuxième if true auto (rq: syntax mod like true ASM jmf fait référence à l'instruction precedente pour check la cond #interpretation part)
+//rq: start line =0
+void IfOperation(void){
+	lastJump++;
+	old_depth[lastJump]=depth;
+	jumpToPatch[lastJump]=cp;
+	depth+=MAX_INSIDE_IF;
+	cp++;
+}
+void ElseOperation(void){
+	//car if seul différent de if else
+	//lastJump+1 car repatchage d'un if déjà patché (le if gère comme un if normal) 
+	printf("\n [YACC REPATCH IF false goto line: %d]",cp+1);
+	snprintf(instruction[jumpToPatch[lastJump+1]],30,"JMF %d \n",cp+1);
+	lastJump++;
+	depth++;
+	jumpToPatch[lastJump]=cp;
+	cp++;
+}
+
+void IfPatchOperation(int addr){
+
+	printf("\n [YACC PATCH IF addr false goto line: %d]",cp);
+	snprintf(instruction[jumpToPatch[lastJump]],30,"JMF %d \n",addr);//if else addr=cp+1, sinon cp
+	depth=old_depth[lastJump];
+	lastJump--;
+}
+void ElsePatchOperation(void){
+
+	printf("\n [YACC PATCH ELSE false goto line: %d]",cp);
+	snprintf(instruction[jumpToPatch[lastJump]],30,"JMP %d \n",cp);
+	lastJump--;
+	depth--;
 }
 %}
 
@@ -62,6 +120,7 @@ void ReturnOperation(int addr, int value){
 }
  
 %token  tCOMMA
+%token  tIF tELSE
 %token  tOP tCP
 %token  tOB tCB
 %token  tVAR 
@@ -109,7 +168,7 @@ Body :
 Expression :
     tINT_VAL      { 
     		$<s>$.ADDR=tempAddr;
-    		$<s>$.FLOAT = (float)$<s>1.INT;
+    		$<s>$.FLOAT = $<s>1.FLOAT;
 		AutreOperation("AFC",tempAddr, $<s>$.FLOAT);
 		tempAddr++;
 		}
@@ -147,9 +206,11 @@ Expression :
   | tOP Expression tCP  { $<s>$.FLOAT=$<s>2.FLOAT; $<s>$.ADDR=$<s>2.ADDR; }
   | tVAR	{/*^$$= value_of_variable_tVar */
   		//!\ il ne faut pas renvoyer l'adresse de la var mais une copie temp (sinon modifie définitivement la var)
-  		$<s>$.FLOAT = atof(getValeurToPrint($<s>1.STR));
+  		char *buff=getValeurToPrint($<s>1.STR);
+  		$<s>$.FLOAT = atof(buff);
+  		free(buff);
 		$<s>$.ADDR=tempAddr;
-		int varAddr = getAdresse($<s>1.STR);
+		int varAddr = getAdresse($<s>1.STR,depth);
 		if(!varEstIni(varAddr)) {
 			printf(" \033[01;31m FATAL ERROR :unitialized variable \033[0m");
 			exit(-1);
@@ -164,20 +225,22 @@ Liste :
 				printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
 				exit(-1);
 		}
-		ajouter($<s>1.STR, declaration_a_virg_last_type, false, false);
+		ajouter($<s>1.STR, declaration_a_virg_last_type, false, false,depth);
   	} Liste
       | tVAR tVIRG  {
       		if(alreadyDeclaredVar($<s>1.STR)) {
 					printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
 					exit(-1);
 		}
-		ajouter($<s>1.STR, declaration_a_virg_last_type, false, false);
+		ajouter($<s>1.STR, declaration_a_virg_last_type, false, false,depth);
  	} Instruction
       ;
+If :tIF tOP Expression tCP { hasOneIf=1;/*GENERER JMF */IfOperation();} Body {IfPatchOperation(cp);} ;
+Else:tELSE { /*GENERER JMP*/ElseOperation();} Body {ElsePatchOperation();};
 
 Instruction:
-  tVAR tPLUS tPLUS tVIRG{
-		int varAddr = getAdresse($1);		
+  tVAR tPLUS tPLUS tVIRG {if(OPTI)activeInstruction=0;}{
+		int varAddr = getAdresse($1,depth);		
 		if(isSymbolConst(varAddr)) {
 			printf("\033[01;31m FATAL ERROR : const variable cannot reaffect value \033[0m");
 			exit(-1);
@@ -188,20 +251,25 @@ Instruction:
 		}
 		int type=getType($1);
 		if(type==FLOAT_TYPE || type==INT_TYPE){
-			float value=atof(getValeurToPrint($1));
+			char *buff=getValeurToPrint($1);
+			float value=atof(buff);
+			free(buff);
 			setValeurFloat($1,value+1);
-			//operation("COP",varAddr, $<s>1.ADDR, $<s>3.ADDR);
 			AutreOperation("AFC",tempAddr, 1);//on stocke 1 dans une adresse temp
 			operation("ADD",varAddr,varAddr,tempAddr);//on stocke dans varAddr varAddr+1
 			//rq: ope atomique => pas besoin d'incrementer tempAddr (on peut écraser le 1 ss probleme)
+			if(OPTI){
+				AutreOperation("AFC",varAddr, value+1);
+				activeInstruction=1;
+			}
 		}
 		else {
 			printf("\033[01;31m FATAL ERROR : This type doesn't permit quick increment  \033[0m");
 			exit(-1);
 		}
    } Instruction
- | tVAR tMOINS tMOINS tVIRG{
-   		int varAddr = getAdresse($1);		
+ | tVAR tMOINS tMOINS tVIRG {if(OPTI)activeInstruction=0;}{
+   		int varAddr = getAdresse($1,depth);		
 		if(isSymbolConst(varAddr)) {
 			printf("\033[01;31m FATAL ERROR : const variable cannot reaffect value \033[0m");
 			exit(-1);
@@ -212,79 +280,93 @@ Instruction:
 		}
 		int type=getType($1);
 		if(type==FLOAT_TYPE || type==INT_TYPE){
-			float value=atof(getValeurToPrint($1));
+			char *buff=getValeurToPrint($1);
+			float value=atof(buff);
+			free(buff);
 			setValeurFloat($1,value-1);
-			//AutreOperation("COP",varAddr, value-1);
 			AutreOperation("AFC",tempAddr, 1);//on stocke 1 dans une adresse temp
 			operation("SOU",varAddr,varAddr,tempAddr);//on stocke dans varAddr varAddr-1
+			if(OPTI){
+				AutreOperation("AFC",varAddr, value-1);
+				activeInstruction=1;
+			}
 		}
 		else {
 			printf("\033[01;31m FATAL ERROR : This type doesn't permit quick increment  \033[0m");
 			exit(-1);
 		}
    } Instruction
-  |Type tVAR tEGAL Expression tVIRG {
+  |Type tVAR tEGAL{if(OPTI)activeInstruction=0;} Expression tVIRG {
 		if(alreadyDeclaredVar($<s>2.STR)) {
 			printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
 			exit(-1);
 		}
-		int varAddr =ajouter($<s>2.STR, $<s>1.INT, true,false);
+		int varAddr =ajouter($<s>2.STR, $<s>1.INT, true,false,depth)-1;
 		if(!varEstIni(varAddr)) {
 			iniVar(varAddr);
 		}
   		int type=$<s>1.INT;
 		if(type==FLOAT_TYPE || type==INT_TYPE){
-			setValeurFloat($<s>2.STR,(float)$<s>4.FLOAT);
-			AutreOperation("COP",varAddr, $<s>4.ADDR);
+			setValeurFloat($<s>2.STR,(float)$<s>5.FLOAT);
+			AutreOperation("COP",varAddr, $<s>5.ADDR);
 		}
 		else if(type==CHAR_TYPE){
-			setValeurStr($2,$<s>4.STR);
-			//printf("[YACC COP %d : %s]", varAddr , $<s>4.STR);
-			AutreOperation("COP",varAddr, $<s>4.ADDR);
+			setValeurStr($2,$<s>5.STR);
+			//printf("[YACC COP %d : %s]", varAddr , $<s>5.STR);
+			AutreOperation("COP",varAddr, $<s>5.ADDR);
+		}
+		
+		if(OPTI){
+		activeInstruction=1;
+		AutreOperation("AFC",varAddr, (float)$<s>5.FLOAT);
 		}
   } Instruction
-| Type tCONST tVAR tEGAL Expression tVIRG {
+| Type tCONST tVAR tEGAL {if(OPTI)activeInstruction=0;} Expression tVIRG {
 		if(alreadyDeclaredVar($<s>3.STR)) {
 			printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
 			exit(-1);
 		}
-  		int varAddr = ajouter($3, $<s>1.INT, true,true);//cst
+  		int varAddr = ajouter($3, $<s>1.INT, true,true,depth)-1;//cst
 		int type=$<s>1.INT;
 		if(type==FLOAT_TYPE || type==INT_TYPE){
-			setValeurFloat($3,(float)$<s>5.FLOAT);
-			//AutreOperation("COP",varAddr, (float)$<s>5.FLOAT);
-			AutreOperation("COP",varAddr, $<s>5.ADDR);
+			setValeurFloat($3,(float)$<s>6.FLOAT);
+			AutreOperation("COP",varAddr, $<s>6.ADDR);
 		}
 		else if(type==CHAR_TYPE){
-			setValeurStr($3,$<s>5.STR);
-			//printf("[YACC COP %d : %s]", varAddr , $<s>5.STR);(StrOperation)
-			AutreOperation("COP",varAddr, $<s>5.ADDR);
+			setValeurStr($3,$<s>6.STR);
+			AutreOperation("COP",varAddr, $<s>6.ADDR);
+		}
+		if(OPTI){
+			activeInstruction=1;
+			AutreOperation("AFC",varAddr, (float)$<s>6.FLOAT);
 		}
   } Instruction
- | tCONST Type tVAR tEGAL Expression tVIRG {
+ | tCONST Type tVAR tEGAL{if(OPTI)activeInstruction=0;} Expression tVIRG {
  		if(alreadyDeclaredVar($<s>3.STR)) {
 					printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
 					exit(-1);
 		}
-    		int varAddr = ajouter($3, $<s>2.INT, true,true);
+    		int varAddr = ajouter($3, $<s>2.INT, true,true,depth)-1;
   		int type=$<s>2.INT;
   		if(type==FLOAT_TYPE || type==INT_TYPE){
-  			setValeurFloat($3,(float)$<s>5.FLOAT);
-  			//printf("[YACC COP %d : %f ]", varAddr , (float)$<s>5.FLOAT);
-  			AutreOperation("COP",varAddr, $<s>5.ADDR);
-  		}
-  		else if(type==CHAR_TYPE){
-  			setValeurStr($3,$<s>5.STR);
-  			//printf("[YACC COP %d : %s]", varAddr , $<s>5.STR);
-  			AutreOperation("COP",varAddr, $<s>5.ADDR);
-  		}
+				setValeurFloat($3,(float)$<s>6.FLOAT);
+				AutreOperation("COP",varAddr, $<s>6.ADDR);
+			}
+		else if(type==CHAR_TYPE){
+			setValeurStr($3,$<s>6.STR);
+			AutreOperation("COP",varAddr, $<s>6.ADDR);
+		}
+		if(OPTI){
+			activeInstruction=1;
+			AutreOperation("AFC",varAddr, (float)$<s>6.FLOAT);
+		}
   } Instruction
 | Type tVAR tVIRG {
 		if(alreadyDeclaredVar($<s>2.STR)) {
 					printf("\033[01;31m FATAL ERROR : already declared var \033[0m");
 					exit(-1);
 		}
-		ajouter($2, $<s>1.INT, false, false);
+		ajouter($2, $<s>1.INT, false, false,depth);
   } Instruction
 | Type tVAR tCOMMA {
 	if(alreadyDeclaredVar($<s>2.STR)) {
@@ -292,11 +374,11 @@ Instruction:
 				exit(-1);
 	}
 	declaration_a_virg_last_type= $<s>1.INT;
-	ajouter($2, $<s>1.INT, false, false);
+	ajouter($2, $<s>1.INT, false, false,depth);
   } Liste
-| tVAR tEGAL Expression tVIRG {
+| tVAR tEGAL {if(OPTI)activeInstruction=0;}Expression tVIRG {
 	//printf("[YACC %s ]",$1);
-	int varAddr = getAdresse($1);		
+	int varAddr = getAdresse($1,depth);		
 			if(isSymbolConst(varAddr)) {
 				printf("\033[01;31m FATAL ERROR : const variable cannot reaffect value \033[0m");
 				exit(-1);
@@ -306,20 +388,24 @@ Instruction:
 			}
 		int type=getType($1);
 		if(type==FLOAT_TYPE || type==INT_TYPE){
-			setValeurFloat($1,$<s>3.FLOAT);
-			//printf("[YACC COP %d %f ]", varAddr, $<s>3.FLOAT);
-			AutreOperation("COP",varAddr, $<s>3.ADDR);
+			setValeurFloat($1,$<s>4.FLOAT);
+			AutreOperation("COP",varAddr, $<s>4.ADDR);
 		}
 		else if(type==CHAR_TYPE){
-			setValeurStr($1,$<s>3.STR);
-			//printf("[YACC COP %d %s ]", varAddr, $<s>3.STR);
-			AutreOperation("COP",varAddr, $<s>3.ADDR);
+			setValeurStr($1,$<s>4.STR);
+			AutreOperation("COP",varAddr, $<s>4.ADDR);
+		}
+		if(OPTI){
+			activeInstruction=1;
+			AutreOperation("AFC",varAddr, (float)$<s>4.FLOAT);
 		}
 	
   }Instruction
-| tPRINTF tOP tVAR { PrintfOperation($3, getValeurToPrint($3),getAdresse($3) );}tCP tVIRG Instruction 
+| If Else Instruction
+| If Instruction
+| tPRINTF tOP tVAR { PrintfOperation($3, getValeurToPrint($3),getAdresse($3,depth) );}tCP tVIRG Instruction 
 | tRETURN tVAR tVIRG {
-			int varAddr = getAdresse($2);
+			int varAddr = getAdresse($2,depth);
 			if(voidOrIntMain==0){
 				printf("\033[01;31m FATAL ERROR : void function cannot return a value, switch to int main() \033[0m");
 				exit(-1);
@@ -331,9 +417,10 @@ Instruction:
 					printf("\033[01;33m Warning dead code! more than one return without conditionnal \033[0m");
 					}else
 			hasAreturn =1;
-			$<s>$.INT =atoi(getValeurToPrint($2));
+			char* buff=getValeurToPrint($2);
+			$<s>$.INT =atoi(buff);
+			free(buff);
 			$<s>$.ADDR=tempAddr;
-			printf("[YACC RETURN value: %d",$<s>$.INT);
 			AutreOperation("COP",tempAddr, varAddr);
 			ReturnOperation($<s>$.ADDR,$<s>$.INT);
 			tempAddr++;
@@ -349,7 +436,6 @@ Instruction:
 		hasAreturn =1;
 	         $<s>$.INT = $<s>2.INT;
 		$<s>$.ADDR=tempAddr;
-		printf("[YACC RETURN value: %d",$<s>$.INT);
 		AutreOperation("AFC",tempAddr, $<s>$.INT);
 		ReturnOperation($<s>$.ADDR,$<s>$.INT);
 		tempAddr++;
@@ -366,14 +452,22 @@ int yywrap(void)
 {
    return 1;
 }
-int main()
-{
-//nettoie
-    file = fopen(output,"a+");    
+int main(int argc,  char** argv)
+{	
+    if(argc ==2)
+    	OPTI=atoi(argv[1]);
+    else
+    	OPTI=0;
+    file = fopen(output,"w+");    
     yyparse();
+    for(int i=0; i<cp;i++)
+    	fprintf(file,instruction[i]);
     fclose(file);
+    if(hasOneIf && OPTI)
+    	printf("\033[01;33m Warning use optimisation mode with if !Conditionnal statements are not yet managed in optimisation \033[0m");
     if(success)
     	printf("Parsing Successful\n");
+    freeAll();
     return 0;
 }
 

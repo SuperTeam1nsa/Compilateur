@@ -43,8 +43,8 @@ Instruction:
         {asm_add_2(AFC, $2, $3);}
     | tJMP tNB
         {asm_add_1(JMP, $2);}
-    | tJMF tNB tNB
-        {asm_add_2(JMF, $2, $3);}
+    | tJMF tNB
+        {asm_add_1(JMF, $2);}
     | tINF tNB tNB tNB
         {asm_add_3(INF, $2, $3, $4);}
     | tINE tNB tNB tNB
