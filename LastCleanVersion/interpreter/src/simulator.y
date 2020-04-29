@@ -12,7 +12,7 @@
     int nb;
 }
 
-%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tCMP tSUE tINE tDIF tNOT tPRI tRET
+%token tADD tMUL tSOU tDIV tCOP tAFC tJMP tJMF tINF tSUP tCMP tSUE tINE tDIF tNOT tPRI tRET tJMT
 
 %token <nb> tNB
 
@@ -45,6 +45,8 @@ Instruction:
         {asm_add_1(JMP, $2);}
     | tJMF tNB
         {asm_add_1(JMF, $2);}
+    | tJMT tNB
+        {asm_add_1(JMT, $2);}
     | tINF tNB tNB tNB
         {asm_add_3(INF, $2, $3, $4);}
     | tINE tNB tNB tNB

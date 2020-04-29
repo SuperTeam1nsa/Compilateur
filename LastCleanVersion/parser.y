@@ -11,6 +11,7 @@
 #define MAX_INSTRUCTIONS 1000
 #define SIZE_INSTRUCTION 30
 #define MAX_INSIDE_IF 10
+#define MAX_INSIDE_LOOP 10
 int OPTI;
 
 int tempAddr = 100;
@@ -22,7 +23,12 @@ int cp=0;
 int depth=0;
 int old_depth[MAX_INSIDE_IF];
 int jumpToPatch[MAX_INSIDE_IF];
+int old_depthW[MAX_INSIDE_LOOP];
+int jumpToPatchW[MAX_INSIDE_LOOP];
+int lastJumpW=-1;
 int lastJump=-1;
+
+
 int activeInstruction=1;
 int hasOneIf=0;
 
@@ -106,6 +112,22 @@ void ElsePatchOperation(void){
 	lastJump--;
 	depth--;
 }
+
+void loopStart(void){
+	lastJumpW++;
+	old_depthW[lastJumpW]=depth;
+	jumpToPatchW[lastJumpW]=cp;
+	depth+=MAX_INSIDE_LOOP;
+
+}
+void loopEnd(void){
+	printf("\n [YACC PATCH DO WHILE addr goto line: %d]",cp);
+	snprintf(instruction[cp],30,"JMT %d \n",jumpToPatchW[lastJumpW]);
+	depth=old_depthW[lastJumpW];
+	lastJumpW--;
+	cp++;
+}
+
 %}
 
 %union {
@@ -120,7 +142,8 @@ void ElsePatchOperation(void){
 }
  
 %token  tCOMMA
-%token  tIF tELSE
+%token  tIF tELSE 
+%token  tDO tWHILE
 %token  tOP tCP
 %token  tOB tCB
 %token  tVAR 
@@ -403,6 +426,7 @@ Instruction:
   }Instruction
 | If Else Instruction
 | If Instruction
+| tDO { loopStart();} Body tWHILE tOP Expression tCP {loopEnd();} tVIRG Instruction
 | tPRINTF tOP tVAR { PrintfOperation($3, getValeurToPrint($3),getAdresse($3,depth) );}tCP tVIRG Instruction 
 | tRETURN tVAR tVIRG {
 			int varAddr = getAdresse($2,depth);

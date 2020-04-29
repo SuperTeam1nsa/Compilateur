@@ -36,6 +36,8 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 "<="  {printf("tINFEGAL "); return(tINFEGAL);}
 "!="  {printf("tDIFF "); return(tDIFF);}
 "!"  {printf("tNOT "); return(tNOT);}
+"do" {printf("tDO "); return(tDO);}
+"while" {printf("tWHILE "); return(tWHILE);}
 "if" {printf("tIF "); return(tIF);}
 "else" {printf("tELSE "); return(tELSE);}
 "int" {printf("tINT ");/*yylval.str = strdup(yytext);*/ return tINT ; }

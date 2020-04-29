@@ -14,6 +14,7 @@ COP {return tCOP;}
 AFC {return tAFC;}
 JMP {return tJMP;}
 JMF {return tJMF;}
+JMT {return tJMT;}
 INF {return tINF;}
 SUP {return tSUP;}
 CMP {return tCMP;}

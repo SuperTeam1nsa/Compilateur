@@ -56,7 +56,8 @@
      tNOT = 272,
      tPRI = 273,
      tRET = 274,
-     tNB = 275
+     tJMT = 275,
+     tNB = 276
    };
 #endif
 
@@ -74,7 +75,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 78 "simulator.tab.h"
+#line 79 "simulator.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

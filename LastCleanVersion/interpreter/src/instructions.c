@@ -17,7 +17,7 @@ int memory[MAX_MEMORY_SIZE];
 int exec(int ip);
 int valid_memory_addr(int address);
 
-/***** Public funciton *****/
+/***** Public function *****/
 
 void asm_init() {
     current_line = 0;
@@ -119,10 +119,14 @@ int exec(int ip) {
     case JMP:
         printf("JMP to %d\n", arg1);
         next_ip = arg1; break;
-    case JMF://on check la valeur de la dernière value stockée (CMP X, DIFF X etc ) #en vrai ASM flag levé lors des comparaisons
+    case JMF://Jump if false, on check la valeur de la dernière value stockée (CMP X, DIFF X etc ) #en vrai ASM flag levé lors des comparaisons
         printf("JMF cond@%d[%d] to %d\n", instructions[ip-1].arg1, memory[instructions[ip-1].arg1], arg1);
         if (memory[instructions[ip-1].arg1] == 0) next_ip = arg1;
         break;
+	case JMT://Jump if true on check la valeur de la dernière value stockée (CMP X, DIFF X etc ) #en vrai ASM flag levé lors des comparaisons
+			printf("JMF cond@%d[%d] to %d\n", instructions[ip-1].arg1, memory[instructions[ip-1].arg1], arg1);
+			if (memory[instructions[ip-1].arg1] == 1) next_ip = arg1;
+	break;
     case INF:
         printf("INF @%d = @%d[%d] < @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
         memory[arg1] = memory[arg2] < memory[arg3] ? 1 : 0;

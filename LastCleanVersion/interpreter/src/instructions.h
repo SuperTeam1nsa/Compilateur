@@ -18,6 +18,7 @@
 #define NOT 15
 #define SUE 16
 #define INE 17
+#define JMT 18
 
 #define MAX_INSTRUCTIONS_SIZE 256
 #define MAX_MEMORY_SIZE 256
