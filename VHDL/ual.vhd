@@ -1,3 +1,5 @@
+--Compilation OK
+
 library IEEE;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
@@ -43,12 +45,12 @@ begin
 				result <= (x"00" & A) + (x"00" & B);
 			when "001" => --mul(*)
 				result <= A * B;
-			when "010" => --sub(-)
+			when "010" => --sou(-)
 				result <= (x"00" & A) - (x"00" & B);
-			when "011" => --div(/)
-                result <= B; --Aucune idee quoi mettre ici
+			--when "011" => --div(/) --On ne fait pas la division cette annee
+
 			when others =>
-				result <= A;
+				result <= A * B;
         end case;    
     end process;
 
