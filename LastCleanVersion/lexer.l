@@ -55,7 +55,9 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 {char} {printf("tCHAR_VAL "); if(strlen(yytext)>3) {
 					printf("\033[01;33m"" [LEXER overflow warning: char must be only one character ]\033[0m");// \033[01;31m = rouge liste des codes :http://web.theurbanpenguin.com/adding-color-to-your-output-from-c/
 			      }
-			      yylval.s.STR=my_strdup((char[2]) { (char) yytext[1], '\0' });yylval.s.FLOAT=(float)((char) yytext[1]);return(tCHAR_VAL);}
+			      yylval.s.STR=my_strdup((char[2]) { (char) yytext[1], '\0' });
+			      yylval.s.FLOAT=(float)((char) yytext[1]);
+			      return(tCHAR_VAL);}
 {nom_variable} {printf("tVAR [LEXER :%s] ",yytext);yylval.s.STR=my_strdup(yytext); return(tVAR);}
  .	       printf( "[LEXER WARNING Unrecognized character: %s ]", yytext );
 

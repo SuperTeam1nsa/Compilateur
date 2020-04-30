@@ -9,6 +9,6 @@ rm compilateur.exe
 yacc -d -v parser.y
 lex lexer.l
 gcc -std=c99 -g -o compilateur.exe lex.yy.c parser.tab.c symboltable.c -lm
-compilateur.exe %2 < %1
+compilateur.exe $2 < $1
 cd interpreter
 run.sh

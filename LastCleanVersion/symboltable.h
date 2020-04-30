@@ -23,6 +23,7 @@ void afficherTableSymboles();
 
 int ajouter(char id[16], float type, int init, bool isConst,int depth);
 void freeAll(void);
+void setOpti(int);
 //On regarde l'id, si erreur -1
 int getAdresse(char * symbole,int depth);
 int getType(char *id);

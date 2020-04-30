@@ -1,18 +1,26 @@
-# Compilateur
-On windows :  
-in powershell (with color (desactivate it if no output)  
-.\run.bat codeC/le_fichier_c_voulu.c [Mode_optimise] | Out-Host  
-avec Mode_optimise : 0 ou 1  
-e.g :  
-.\run.bat codeC/opti.c 1 | Out-Host 
-or in cmd (without color or follow : https://stackoverflow.com/questions/51680709/colored-text-output-in-powershell-console-using-ansi-vt100-codes#51681675 to activate color broadlly)   
+# Projet système informatique 
+Ce projet a pour but de développer un compilateur capable de transcompiler efficacement du C vers l'assembleur.Mais aussi de développer  un interpreteur de l'assembleur, et d'utiliser VHDL pour concevoir et programmer une FPGA.
+## Exécution :  
+### 1. Windows
+Installez flex et bison sur votre système, accessibles dans le PATH.
+Déplacez vous dans le dossier compilateur depuis powershell : `cd Compilateur/`
+* **Mode couleur** : (utilisez le mode sans couleur si pas d'affichage) 
+	`.\run.bat codeC/le_fichier_c_voulu.c [Mode_optimise] | Out-Host `  
+	avec:` Mode_optimise : 0 ou 1`  
+	**exemple**:  
+	`.\run.bat codeC/full.c 1 | Out-Host `
   
-on linux :  
-Same with run.sh 
+* **sans couleur**: Utiliser cmd au lieu de powershell et sans `| Out-Host` 	 	
+	
+**Pour en savoir plus sur les couleur** : [stackoverflow ](https://stackoverflow.com/questions/51680709/colored-text-output-in-powershell-console-using-ansi-vt100-codes#51681675)  
+  
+### 2. Linux :  
+Installez lex et yacc sur votre système, accessibles dans le PATH.
+Mêmes commandes mais avec run.sh au lieu de run.bat
    
-Features support tests :  
-*  nombre sous forme d'exposant (ex: 10e1)
-*  declaration en ligne des variables sans affectation(ex: int a, b;)
+## Fonctionnalités supportées  :  
+*  nombre sous forme d'exposant (**ex**: 10e1)
+*  declaration en ligne des variables sans affectation(**ex**: int a, b;)
 *  declaration de varibales de type char, int ou float avec ou sans affectation
 *  declaration de variables constantes
 *  reaffectation de valeur à une variable déjà déclarée
@@ -22,20 +30,18 @@ Features support tests :
 *  gestion des return
 *  gestion des operateurs rapides (non imbriques) (++/--)
 *  supporte les comparaisons (<,>,>=,<=,!,!=,==) en renvoyant un entier 0 ou 1 (vrai) conformément au sujet (pas de check de type => use parenthesis for negative value)
-*  gestion des if-else, if et imbrication (max imbrication = MAX_INSIDE_IF)
-*  interpreteur statique du C à la volée pour générer de l'ASM optimisé (sur l'affectation des variables et les calculs statiques (ne gère pas les if)): 3 fois moins d'instructions ASM sur l'exemple
+*  **gestion des if-else, if et imbrication** (max imbrication = MAX_INSIDE_IF)
+*  **gestion de la boucle do while** (max imbrication = MAX_INSIDE_LOOP)
+*  **interpreteur statique du C à la volée pour générer de l'ASM optimisé**, optimise  l'affectation des variables et les calculs statiques. Ainsi que les if . Résultat: **jusqu'à 4 fois moins d'instructions ASM** (sur l'exemple full.c)
+**Remarque:** les boucles ne sont pas optimisées et les vérifications d'erreurs C sont moins nombreuses dans ce mode
 
-Erreur tests réalisés:  
-*  const reaffectation => Fatal error
-*  char de plus de un character (va etre tronque) => warning
-*  return uninitialized var => warning
-*  return sur une void function => fatal error
-*  no return on a non-void function => warning
-*  more than one return in a function (without conditional jump #dead code) => warning
+## Tests d'erreurs réalisés:  
+*  Réaffectation d'une variable => Erreur fatale
+*  char de plus de un character (va etre tronqué) => warning
+*  return d'une variable non-initialisé => warning
+*  return sur une void function => Erreur fatale
+*  Pas de return avec une fonction non-void => warning
 *  declaration du même nom de variable 2 fois => fatal error
 *  ++/-- sur autre chose qu'un int/float ou un const => fatal error
-*  ++/-- on unintialized var =>   fatal error
-*  scope check for var (use a var declared in a if outside is not tolerated)=> fatal error
-
-
-
+*  ++/-- sur une variable non-intialisée =>   fatal error
+*  Vérification de la portée des variables (**par exemple:** utiliser une variable déclaré dans un if en-dehors du if n'est pas toléré )=> fatal error

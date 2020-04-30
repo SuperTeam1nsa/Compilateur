@@ -8,7 +8,7 @@
 #define MAX_VAR_SIZE 64
 struct ligne tab[SIZE];//malloc(sizeof(struct ligne)*100);
 int profondeur = 0;
-
+int OPTI=0;
 /*int main() {
 
     //TEST
@@ -67,12 +67,13 @@ int getType(char *id) {
 	printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? \033[0m", id);
 	exit(-1);
 }
+void setOpti(int o){OPTI=o;}
 int getAdresse(char *id,int depth) {
 	for (int i=profondeur - 1; i >= 0 ; i--) {
 		//si le nom de la variable correspond
 		if (strcmp(id, tab[i].id)==0) {
 			//si on a declare la variable dans un if par exemple
-			if(tab[i].depth > depth)
+			if(!OPTI && tab[i].depth > depth)
 			{
 				printf("\033[01;31m Erreur fatale: la variable %s n'est pas accessible dans ce bloc, hint: check block declaration  \033[0m", id);
 				exit(-1);
