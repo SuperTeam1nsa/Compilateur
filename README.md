@@ -1,23 +1,42 @@
 # Projet système informatique 
-Ce projet a pour but de développer un compilateur capable de transcompiler efficacement du C vers l'assembleur.Mais aussi de développer  un interpreteur de l'assembleur, et d'utiliser VHDL pour concevoir et programmer une FPGA.
+Ce projet a pour but de développer un compilateur capable de transcompiler efficacement du C vers l'assembleur.Il a aussi pour objectif de développer  un interpreteur de l'assembleur, et d'utiliser VHDL pour concevoir et programmer une carte FPGA.  
+Les fichiers en C pour tester le compilateur sont disponibles dans `Compilateur/codeC/`.
 ## Exécution :  
-### 1. Windows
+### 1. Du compilateur
+#### 1. Windows
 Installez flex et bison sur votre système, accessibles dans le PATH.
 Déplacez vous dans le dossier compilateur depuis powershell : `cd Compilateur/`
 * **Mode couleur** : (utilisez le mode sans couleur si pas d'affichage) 
-	`.\run.bat codeC/le_fichier_c_voulu.c [Mode_optimise] | Out-Host `  
+	`./run.bat codeC/le_fichier_c_voulu.c [Mode_optimise] | Out-Host `  
 	avec:` Mode_optimise : 0 ou 1`  
 	**exemple**:  
-	`.\run.bat codeC/full.c 1 | Out-Host `
+	`./run.bat codeC/full.c 1 | Out-Host `
   
 * **sans couleur**: Utiliser cmd au lieu de powershell et sans `| Out-Host` 	 	
-	
+* 	**Sortie**: Les informations comprises et interprétées par Lex et par Yacc s'affichent dans la console, l'ASM généré est situé dans `interpreter/output.asm`  
+
 **Pour en savoir plus sur les couleur** : [stackoverflow ](https://stackoverflow.com/questions/51680709/colored-text-output-in-powershell-console-using-ansi-vt100-codes#51681675)  
   
-### 2. Linux :  
+#### 2. Linux :  
+Installez lex et yacc sur votre système, accessibles dans le PATH.
+Mêmes commandes mais avec run.sh au lieu de run.bat et sans `| Out-Host` (les couleurs sont gérées nativement sur la plupart des distributions).
+### 2. De l'interpréteur ASM 
+#### 1. Windows
+Installez flex et bison sur votre système, accessibles dans le PATH.
+Déplacez vous dans le dossier interpreter depuis powershell : `cd Compilateur/interpreter`
+	`./run.bat`  
+* 	**Sortie**: l'exécution des commandes s'affiche dans la console
+  
+#### 2. Linux :  
 Installez lex et yacc sur votre système, accessibles dans le PATH.
 Mêmes commandes mais avec run.sh au lieu de run.bat
-   
+
+### 3. Du compilateur et de l'interpréteur:
+Déplacez vous dans le dossier compilateur depuis powershell :  `cd Compilateur/`  
+
+Utilisez `./runfull.bat codeC/le_fichier_c_voulu.c [Mode_optimise] | Out-Host `  
+ou `./runfull.sh codeC/le_fichier_c_voulu.c [Mode_optimise]` selon votre OS.
+
 ## Fonctionnalités supportées  :  
 *  nombre sous forme d'exposant (**ex**: 10e1)
 *  declaration en ligne des variables sans affectation(**ex**: int a, b;)
