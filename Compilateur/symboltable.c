@@ -38,18 +38,6 @@ void freeAll(){
 			free(tab[i].valeur);
 	}
 }
-void afficherTableSymboles() {
-
-	printf("	               ***              \n");
-	printf("	|      Table des symboles      |\n");
-	printf("	+              ***             + \n");
-    printf("	+------------------------------+\n");
-	for (int i=0; i < profondeur ; i++) {
-		printf("	| %5s | %8s | %3d | %3d | %s \n",tab[i].id, tab[i].type, tab[i].init, tab[i].depth,"%s", tab[i].isConst ? "true" : "false");
-		printf("	+------------------------------+\n");
-	}
-
-}
 bool alreadyDeclaredVar(char* id){
 	for (int i=profondeur - 1; i >= 0 ; i--) {
 			if (strcmp(id, tab[i].id)==0) {

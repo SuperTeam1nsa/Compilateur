@@ -540,7 +540,7 @@ int main(int argc,  char** argv)
     file = fopen(output,"w+");    
     yyparse();
     for(int i=0; i<cp;i++)
-    	fprintf(file,instruction[i]);
+    	fprintf(file,"%s",instruction[i]);
     fclose(file);
     /*if(hasOneIf && OPTI)
     	printf("\033[01;33m Warning use optimisation mode with if !Conditionnal statements are not yet managed in optimisation \033[0m");*/
