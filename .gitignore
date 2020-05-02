@@ -6,3 +6,12 @@ LastCleanVersion/parser.tab.h
 LastCleanVersion/parser.tab.c
 LastCleanVersion/compilateur.exe
 *.exe
+Compilateur/parser.tab.h
+Compilateur/parser.tab.c
+Compilateur/parser.output
+Compilateur/lex.yy.c
+Compilateur/interpreter/src/simulator.tab.h
+Compilateur/interpreter/src/simulator.tab.c
+Compilateur/interpreter/src/simulator.output
+Compilateur/interpreter/output.asm
+Compilateur/interpreter/src/lex.yy.c

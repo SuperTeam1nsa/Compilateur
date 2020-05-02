@@ -17,9 +17,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity ual is
     Port ( A : in  STD_LOGIC_VECTOR (7 downto 0);
            B : in  STD_LOGIC_VECTOR (7 downto 0);
-           S : out  STD_LOGIC_VECTOR (7 downto 0);
            Ctrl_Alu : in  STD_LOGIC_VECTOR (2 downto 0);
            
+           S : out  STD_LOGIC_VECTOR (7 downto 0);
            N : out  STD_LOGIC;
            O : out  STD_LOGIC;
            Z : out  STD_LOGIC;
@@ -54,13 +54,20 @@ begin
         end case;    
     end process;
 
---Les drapeaux (flags) : N,O, Z et C représentent, respectivement, --une valeur négative en sortie (S < 0), 
---un débordement (overflow : taille de A OP B > 8 bits), --une sortie nulle (S = 0) --et la retenue (carry) de l’addition
-
 	S <= result(7 downto 0);
 
+--Les drapeaux (flags) : N,O, Z et C représentent, respectivement:
+--N : une valeur négative en sortie (S < 0), 
+--O:un débordement (overflow : taille de A OP B > 8 bits),
+--Z: --une sortie nulle (S = 0)
+--C: la retenue (carry) de l’addition
+
 	N <= result(7);
-	O <= '0' when result(15 downto 8) = x"00" else '1';
+--O <= '0' when result(15 downto 8) = x"00" else '1'; /!\ overflow = changement de signe, sujet overflow si >8bits ambigus 
+
+	O <='1' when (A(7) = B(7) and S_aux(7) /= A(7) and Ctrl_Alu = "000" --ADD 2 nombres de même signe et changement de signe
+		) or (A(7) /= B(7) and S_aux(7) = B(7) and Ctrl_Alu = "001" --SUB 2 nombres de signes différent et le deuxième change de signe, si le resultat est du signe du deuxième c'est qu'on a créé un overflow 
+		) else '0';
 	Z <= '1' when result(7 downto 0) = x"00" else '0';
 	C <= '1' when result(8)='1' else '0';
 
