@@ -65,8 +65,8 @@ begin
 	N <= result(7);
 --O <= '0' when result(15 downto 8) = x"00" else '1'; /!\ overflow = changement de signe, sujet overflow si >8bits ambigus 
 
-	O <='1' when (A(7) = B(7) and S_aux(7) /= A(7) and Ctrl_Alu = "000" --ADD 2 nombres de même signe et changement de signe
-		) or (A(7) /= B(7) and S_aux(7) = B(7) and Ctrl_Alu = "001" --SUB 2 nombres de signes différent et le deuxième change de signe, si le resultat est du signe du deuxième c'est qu'on a créé un overflow 
+	O <='1' when (A(7) = B(7) and result(7) /= A(7) and Ctrl_Alu = "000" --ADD 2 nombres de même signe et changement de signe
+		) or (A(7) /= B(7) and result(7) = B(7) and Ctrl_Alu = "001" --SUB 2 nombres de signes différent et le deuxième change de signe, si le resultat est du signe du deuxième c'est qu'on a créé un overflow 
 		) else '0';
 	Z <= '1' when result(7 downto 0) = x"00" else '0';
 	C <= '1' when result(8)='1' else '0';
