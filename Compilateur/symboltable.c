@@ -31,9 +31,12 @@ int getIndice() {
 
 void deleteVarDepht(int depth){
 	int i=profondeur - 1;
-		while(i >= 0 && tab[i].depth=depth; i--) {
+	printf("\n\n DEPTH :%d i :%d",depth, i);
+		while(i >= 0 && tab[i].depth==depth) {
 			profondeur--;
 			free(tab[i].valeur);
+			printf("\n depti :%d ",tab[i].depth);
+			i--;
 	}
 }
 void freeAll(){

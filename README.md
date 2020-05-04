@@ -52,7 +52,7 @@ ou `./runfull.sh codeC/le_fichier_c_voulu.c [Mode_optimise]` selon votre OS.
 *  **gestion des if-else, if et imbrication** (max imbrication = MAX_INSIDE_IF)
 *  **gestion de la boucle do while** (max imbrication = MAX_INSIDE_LOOP)
 *  liberation de la memoire des variables temporaires (reutilisation) 
-*  gestion de la durée de vie des variables (suppression des variables en-dehors de leur portée)
+*  gestion de la durée de vie des variables (suppression des variables en-dehors de leur portée pour reutilisation de l'adresse)
 *  **interpreteur statique du C à la volée pour générer de l'ASM optimisé**, optimise  l'affectation des variables et les calculs statiques. Ainsi que les if . Résultat: **jusqu'à 4 fois moins d'instructions ASM** (sur l'exemple full.c)
 **Remarque:** les boucles ne sont pas optimisées et les vérifications d'erreurs C sont moins nombreuses dans ce mode
 

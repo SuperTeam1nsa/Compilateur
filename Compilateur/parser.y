@@ -23,15 +23,15 @@ int hasAreturn=0;
 char instruction[MAX_INSTRUCTIONS][SIZE_INSTRUCTION];
 int cp=0;
 int depth=0;
-int old_depth[MAX_INSIDE_IF];
+//variante depth : if => depth +=MAX_INSIDE_IF, ifPatch: depth =olddepth[lastJump] else: depth++; elsepatch: depth--
 int jumpToPatch[MAX_INSIDE_IF];
-int activeIf[MAX_INSIDE_IF];
-int old_depthW[MAX_INSIDE_LOOP];
-int jumpToPatchW[MAX_INSIDE_LOOP];
-int lastJumpW=-1;
 int lastJump=-1;
 
+int jumpToPatchW[MAX_INSIDE_LOOP];
+int lastJumpW=-1;
 
+
+int activeIf[MAX_INSIDE_IF];
 int activeInstruction=1;
 int wasInActifState=1;
 int wasInActifStateIf=1;
@@ -98,9 +98,8 @@ if(activeInstruction){
 void IfOperation(void){
 if(activeInstruction){
 	lastJump++;
-	old_depth[lastJump]=depth;
 	jumpToPatch[lastJump]=cp;
-	depth+=MAX_INSIDE_IF;
+	depth++;
 	cp++;
 	}
 }
@@ -121,7 +120,8 @@ void IfPatchOperation(int addr){
 if(activeInstruction){
 	printf("\n [YACC PATCH IF addr false goto line: %d]",cp);
 	snprintf(instruction[jumpToPatch[lastJump]],30,"JMF %d \n",addr);//if else addr=cp+1, sinon cp
-	depth=old_depth[lastJump];
+	deleteVarDepht(depth);
+	depth--;
 	lastJump--;
 	}
 }
@@ -129,6 +129,7 @@ void ElsePatchOperation(void){
 if(activeInstruction){
 	printf("\n [YACC PATCH ELSE false goto line: %d]",cp);
 	snprintf(instruction[jumpToPatch[lastJump]],30,"JMP %d \n",cp);
+	deleteVarDepht(depth);
 	lastJump--;
 	depth--;
 	}
@@ -137,9 +138,8 @@ if(activeInstruction){
 void loopStart(void){
 if(activeInstruction){
 	lastJumpW++;
-	old_depthW[lastJumpW]=depth;
 	jumpToPatchW[lastJumpW]=cp;
-	depth+=MAX_INSIDE_LOOP;
+	depth++;
 	}
 
 }
@@ -147,7 +147,7 @@ void loopEnd(void){
 if(activeInstruction){
 	printf("\n [YACC PATCH DO WHILE addr goto line: %d]",cp);
 	snprintf(instruction[cp],30,"JMT %d \n",jumpToPatchW[lastJumpW]);
-	depth=old_depthW[lastJumpW];
+	depth--;
 	lastJumpW--;
 	cp++;
 	}
@@ -298,6 +298,7 @@ If :tIF tOP {if(OPTI){
 		tempAddr=INI_TEMP;
 			/*GENERER JMF */ 
 			if(OPTI){
+				depth++;
 				if(wasInActifStateIf){
 					activeIf[lastJump]=$<s>4.FLOAT; 
 					activeInstruction=$<s>4.FLOAT;
@@ -307,8 +308,20 @@ If :tIF tOP {if(OPTI){
 			}
 		} Body {if(!OPTI && activeInstruction){
 			IfPatchOperation(cp);
-			}activeInstruction=1;} ;
-Else:tELSE { /*GENERER JMP*/activeInstruction=activeIf[lastJump]?0:1;if(!OPTI && activeInstruction){ElseOperation();}} Body {if(!OPTI && activeInstruction){ElsePatchOperation();}activeInstruction=1;};
+			}
+			else if(OPTI){
+			deleteVarDepht(depth);
+			depth--;
+			}
+			activeInstruction=1;} ;
+Else:tELSE { /*GENERER JMP*/
+		activeInstruction=activeIf[lastJump]?0:1;
+		if(!OPTI && activeInstruction){ElseOperation();}
+		else if(OPTI){depth++;}
+} Body {if(!OPTI && activeInstruction)
+	{ElsePatchOperation();}
+	else if(OPTI){deleteVarDepht(depth);depth--;}
+	activeInstruction=1;};
 
 Instruction:
   tVAR tPLUS tPLUS tVIRG  {wasInActifState=activeInstruction;if(OPTI)activeInstruction=0;}{

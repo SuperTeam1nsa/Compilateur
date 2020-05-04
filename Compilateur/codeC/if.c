@@ -28,5 +28,6 @@ int main(){
 		i++;
 		i--;
 	}
+	int z=42;
 	return 0;
 }
