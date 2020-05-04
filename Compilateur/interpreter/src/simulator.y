@@ -55,8 +55,8 @@ Instruction:
         {asm_add_3(SUE, $2, $3, $4);}
     | tDIF tNB tNB tNB
         {asm_add_3(DIF, $2, $3, $4);}
-    | tNOT tNB tNB tNB
-        {asm_add_3(NOT, $2, $3, $4);}
+    | tNOT tNB tNB
+        {asm_add_2(NOT, $2, $3);}
     | tSUP tNB tNB tNB
         {asm_add_3(SUP, $2, $3, $4);}
     | tCMP tNB tNB tNB

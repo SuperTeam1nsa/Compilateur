@@ -44,13 +44,15 @@ ou `./runfull.sh codeC/le_fichier_c_voulu.c [Mode_optimise]` selon votre OS.
 *  declaration de variables constantes
 *  reaffectation de valeur à une variable déjà déclarée
 *  gestion des espaces, tab, retour à la ligne
-*  gestion de printf(var) qui affiche le nom de la variable et sa valeur
+*  gestion de printf(var) (+le nom de la variable et sa valeur en console )
 *  gestion des opérations arithmétiques standards( +-/*) et des priorités entre elles ainsi que des parenthèses
 *  gestion des return
 *  gestion des operateurs rapides (non imbriques) (++/--)
 *  supporte les comparaisons (<,>,>=,<=,!,!=,==) en renvoyant un entier 0 ou 1 (vrai) conformément au sujet (pas de check de type => use parenthesis for negative value)
 *  **gestion des if-else, if et imbrication** (max imbrication = MAX_INSIDE_IF)
 *  **gestion de la boucle do while** (max imbrication = MAX_INSIDE_LOOP)
+*  liberation de la memoire des variables temporaires (reutilisation) 
+*  gestion de la durée de vie des variables (suppression des variables en-dehors de leur portée)
 *  **interpreteur statique du C à la volée pour générer de l'ASM optimisé**, optimise  l'affectation des variables et les calculs statiques. Ainsi que les if . Résultat: **jusqu'à 4 fois moins d'instructions ASM** (sur l'exemple full.c)
 **Remarque:** les boucles ne sont pas optimisées et les vérifications d'erreurs C sont moins nombreuses dans ce mode
 

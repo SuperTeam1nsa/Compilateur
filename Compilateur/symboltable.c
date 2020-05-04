@@ -29,9 +29,12 @@ int getIndice() {
 	return profondeur;
 }
 
-
-void decrementerIndice(){
-	profondeur--;
+void deleteVarDepht(int depth){
+	int i=profondeur - 1;
+		while(i >= 0 && tab[i].depth=depth; i--) {
+			profondeur--;
+			free(tab[i].valeur);
+	}
 }
 void freeAll(){
 	for (int i=0; i < profondeur ; i++) {
@@ -70,7 +73,7 @@ int getAdresse(char *id,int depth) {
 			return i;
 		}
 	}
-	printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? \033[0m", id);
+	printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? Have you check block scope ?\033[0m", id);
 	exit(-1);
 }
 void setValeurStr(char* id, char* valeur){

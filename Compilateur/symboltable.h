@@ -17,7 +17,7 @@ struct ligne
 // On fait un malloc => direct
 //void init();
 
-void decrementerIndice();
+void deleteVarDepht(int depth);
 
 void afficherTableSymboles();
 
