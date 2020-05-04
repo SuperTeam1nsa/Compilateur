@@ -15,3 +15,4 @@ Compilateur/interpreter/src/simulator.tab.c
 Compilateur/interpreter/src/simulator.output
 Compilateur/interpreter/output.asm
 Compilateur/interpreter/src/lex.yy.c
+VHDL/Processeur
