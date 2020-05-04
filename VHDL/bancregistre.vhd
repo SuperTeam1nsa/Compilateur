@@ -31,19 +31,20 @@ end bancregistre;
 
 architecture Behavioral of bancregistre is
 
-type registreTableau is array (integer range <>) of STD_LOGIC_VECTOR(7 downto 0);
+type registreTableau is array (integer range 255 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
 signal registr : registreTableau; --Attention on peut pas utiliser registre sinon error
 
 begin
 --Partie Asynchrone
 --@A et @B permettent de lire deux registres simultanément.
 
+
 --https://www.xilinx.com/support/answers/45213.html
---Ajouter ici un when avec  data et w 
+--ATTENTION Si écriture et lecture sur le même registre alors on renvoie data
 	QA <= Data when addW = A AND W = '1' else
-			registr(to_integer(unsigned(A))) when W = '0';
+			registr(to_integer(unsigned(A))) --when W = '0';
 	QB <= Data when addW = B AND W = '1' else
-			registr(to_integer(unsigned(B))) when W = '0';
+			registr(to_integer(unsigned(B))); -- when W = '0';
 
 
 --On considère que le reset et l'écriture se feront synchrone avec l'horloge.
@@ -62,6 +63,5 @@ begin
 		
 	end process;
 	
-	--ATTENTION Si écriture et lecture sur le même registre alors la sortie QX ← DATA PAS COMPRIS !!
 	
 end Behavioral;

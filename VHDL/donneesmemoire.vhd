@@ -38,7 +38,7 @@ begin
 		wait until CLK'event and CLK='1';
 
 -- Le reset, RST, permettra d'initialiser le contenu de la mémoire à 0x00
-		if RST='0' then
+			if RST='0' then
 				donnmemoire <= (others=>(others=>'0'));
 			else	
 -- Pour réaliser une lecture, RW doit être positionné à 1 et pour réaliser une écriture, RW doit être positionné à 0
