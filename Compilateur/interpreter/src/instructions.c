@@ -131,6 +131,14 @@ int exec(int ip) {
         printf("INF @%d = @%d[%d] < @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
         memory[arg1] = memory[arg2] < memory[arg3] ? 1 : 0;
         break;
+    case COR:
+         printf("COR @%d = @%d[%d] || @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
+         memory[arg1] = (memory[arg2] || memory[arg3]) ? 1 : 0;
+        break;
+    case AND:
+          printf("AND @%d = @%d[%d] && @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
+          memory[arg1] = (memory[arg2] && memory[arg3]) ? 1 : 0;
+        break;
     case SUP:
         printf("SUP @%d = @%d[%d] > @%d[%d] ? 1 : 0\n", arg1, arg2, memory[arg2], arg3, memory[arg3]);
         memory[arg1] = memory[arg2] > memory[arg3] ? 1 : 0;

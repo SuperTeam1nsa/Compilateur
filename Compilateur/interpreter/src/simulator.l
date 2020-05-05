@@ -24,6 +24,8 @@ NOT {return tNOT;}
 DIF {return tDIF;}
 PRI {return tPRI;}
 RET {return tRET;}
+AND {return tAND;}
+COR {return tCOR;}
 -?[0-9]+  {
         yylval.nb = atoi(yytext);
         return tNB;

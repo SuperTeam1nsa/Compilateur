@@ -38,6 +38,8 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 "<="  {printf("tINFEGAL "); return(tINFEGAL);}
 "!="  {printf("tDIFF "); return(tDIFF);}
 "!"  {printf("tNOT "); return(tNOT);}
+"&&" {printf("tAND "); return(tAND);}
+"||" {printf("tOR "); return(tOR);}
 "do" {printf("tDO "); return(tDO);}
 "while" {printf("tWHILE "); return(tWHILE);}
 "if" {printf("tIF "); return(tIF);}

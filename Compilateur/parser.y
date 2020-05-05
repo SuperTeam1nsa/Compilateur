@@ -12,11 +12,10 @@
 #define SIZE_INSTRUCTION 30
 #define MAX_INSIDE_IF 10
 #define MAX_INSIDE_LOOP 10
-#define INI_TEMP 100
 int OPTI;
 int user_want_opti;
 
-int tempAddr = INI_TEMP;
+int tempAddr = 0;
 int success = 1; 
 int voidOrIntMain=0;//void by def
 int hasAreturn=0;
@@ -157,7 +156,7 @@ if(activeInstruction){
 
 %union {
 //on déclare une struct plutôt que directement $<INT>$ pour pouvoir renvoyer plusieurs valeurs 
-//#ADDR pour l'interpreteur assembleur et FLOAT pour l'analyse par valeur du C dans le parser
+//#ADDR pour l'interpreteur assembleur et FLOAT pour l'analyse par valeur du C dans le parser, str pour les char, int pour trouver le type
 	struct s{
 	int INT;
 	float FLOAT;
@@ -180,7 +179,7 @@ if(activeInstruction){
 %left tPLUS  tMOINS
 %left tFOIS  tDIVISE
 %left tNEG
-%left tCOMPARAISON tINFSTRICT tSUPSTRICT
+%left tCOMPARAISON tINFSTRICT tSUPSTRICT tAND tOR
 %left tSUPEGAL tINFEGAL tDIFF
 
 %right tNOT tEGAL
@@ -243,6 +242,8 @@ Expression :
   | Expression tSUPEGAL Expression  { $<s>$.FLOAT=($<s>1.FLOAT >= $<s>3.FLOAT?1:0);$<s>$.ADDR=tempAddr; operation("SUE",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
   | Expression tINFEGAL Expression  { $<s>$.FLOAT=($<s>1.FLOAT <= $<s>3.FLOAT?1:0);$<s>$.ADDR=tempAddr; operation("INE",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
   | Expression tDIFF Expression  { $<s>$.FLOAT=($<s>1.FLOAT != $<s>3.FLOAT?1:0);$<s>$.ADDR=tempAddr; operation("DIF",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
+  | Expression tOR Expression  { $<s>$.FLOAT=(($<s>1.FLOAT || $<s>3.FLOAT)?1:0);$<s>$.ADDR=tempAddr; operation("COR",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
+  | Expression tAND Expression  { $<s>$.FLOAT=(($<s>1.FLOAT && $<s>3.FLOAT)?1:0);$<s>$.ADDR=tempAddr; operation("AND",tempAddr, $<s>1.ADDR, $<s>3.ADDR);tempAddr++;}
   | tNOT Expression  { $<s>$.FLOAT=($<s>2.FLOAT==0)?1:0;$<s>$.ADDR=tempAddr; oneOperation("NOT",tempAddr, $<s>2.ADDR);tempAddr++;}
   | tMOINS Expression {
 		$<s>$.FLOAT = -$<s>2.FLOAT;
@@ -295,7 +296,7 @@ If :tIF tOP {if(OPTI){
 		activeInstruction=0;}
 		}
 		Expression tCP {
-		tempAddr=INI_TEMP;
+		tempAddr=getIndice()+1;
 			/*GENERER JMF */ 
 			if(OPTI){
 				depth++;
@@ -359,7 +360,7 @@ Instruction:
 			exit(-1);
 		}
 		}
-		tempAddr=INI_TEMP;
+		tempAddr=getIndice()+1;
    } Instruction
  | tVAR tMOINS tMOINS tVIRG {wasInActifState=activeInstruction;if(OPTI)activeInstruction=0;}{
  		if(wasInActifState){
@@ -395,7 +396,7 @@ Instruction:
 			exit(-1);
 		}
 		}
-		tempAddr=INI_TEMP;
+		tempAddr=getIndice()+1;
    } Instruction
   |Type tVAR tEGAL{wasInActifState=activeInstruction;if(OPTI)activeInstruction=0;} Expression tVIRG {
 		if(wasInActifState){
@@ -422,7 +423,7 @@ Instruction:
 		AutreOperation("AFC",varAddr, (float)$<s>5.FLOAT);
 		}
 		}
-		tempAddr=INI_TEMP;
+		tempAddr=getIndice()+1;
   } Instruction
 | Type tCONST tVAR tEGAL {wasInActifState=activeInstruction;if(OPTI)activeInstruction=0;} Expression tVIRG {
 		if(wasInActifState){
@@ -445,7 +446,7 @@ Instruction:
 			AutreOperation("AFC",varAddr, (float)$<s>6.FLOAT);
 		}
 		}
-		tempAddr=INI_TEMP;
+		tempAddr=getIndice()+1;
   } Instruction
  | tCONST Type tVAR tEGAL{wasInActifState=activeInstruction;if(OPTI)activeInstruction=0;} Expression tVIRG {
  		if(wasInActifState){
@@ -468,7 +469,7 @@ Instruction:
 			AutreOperation("AFC",varAddr, (float)$<s>6.FLOAT);
 		}
 		}
-		tempAddr=INI_TEMP;
+		tempAddr=getIndice()+1;
   } Instruction
 | Type tVAR tVIRG {
 		if(activeInstruction){
@@ -513,7 +514,7 @@ Instruction:
 			AutreOperation("AFC",varAddr, (float)$<s>4.FLOAT);
 		}
 		}
-		tempAddr=INI_TEMP;
+		tempAddr=getIndice()+1;
   }Instruction
 | If Else Instruction
 | If Instruction

@@ -14,7 +14,7 @@ int main(){
 			{
 				w--;
 				int omega=42;
-				if(1){
+				if(1 && (omega==42) || 0){
 					w =w -omega;
 				}
 			}

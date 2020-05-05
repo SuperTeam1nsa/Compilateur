@@ -48,7 +48,7 @@ ou `./runfull.sh codeC/le_fichier_c_voulu.c [Mode_optimise]` selon votre OS.
 *  gestion des opérations arithmétiques standards( +-/*) et des priorités entre elles ainsi que des parenthèses
 *  gestion des return
 *  gestion des operateurs rapides (non imbriques) (++/--)
-*  supporte les comparaisons (<,>,>=,<=,!,!=,==) en renvoyant un entier 0 ou 1 (vrai) conformément au sujet (pas de check de type => use parenthesis for negative value)
+*  supporte les comparaisons (<,>,>=,<=,!,!=,==,&&, ||) en renvoyant un entier 0 ou 1 (vrai) conformément au sujet (pas de check de type => use parenthesis for negative value)
 *  **gestion des if-else, if et imbrication** (max imbrication = MAX_INSIDE_IF)
 *  **gestion de la boucle do while** (max imbrication = MAX_INSIDE_LOOP)
 *  liberation de la memoire des variables temporaires (reutilisation) 
