@@ -176,7 +176,7 @@ if(activeInstruction){
 %token  tRETURN
 %token  tPRINTF
 
-%left tPLUS  tMOINS
+%left tPLUS  tMOINS tADR
 %left tFOIS  tDIVISE
 %left tNEG
 %left tCOMPARAISON tINFSTRICT tSUPSTRICT tAND tOR
@@ -518,7 +518,7 @@ Instruction:
   }Instruction
 | If Else Instruction
 | If Instruction
-| tDO { if(activeInstruction)loopStart();OPTI=0;/*pas d'opti de boucle*/} Body tWHILE tOP Expression tCP {if(activeInstruction)loopEnd();OPTI=user_want_opti;} tVIRG Instruction
+| tDO { if(activeInstruction)loopStart();OPTI=0;/*pas d'opti de boucle*/} Body tWHILE tOP Expression tCP {if(activeInstruction)loopEnd();OPTI=user_want_opti;tempAddr=getIndice()+1;} tVIRG Instruction
 | tPRINTF tOP tVAR { if(activeInstruction){PrintfOperation($3, getValeurToPrint($3),getAdresse($3,depth) );}}tCP tVIRG Instruction 
 | tRETURN tVAR tVIRG {
 		if(activeInstruction){

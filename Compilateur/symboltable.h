@@ -30,8 +30,7 @@ int getType(char *id);
 //id=symbole
 void setValeurStr(char* symbole, char* valeur);
 void setValeurFloat(char* symbole, float valeur);
-//void setValeurInt(char* symbole, int valeur);
-//void setValeur(char* symbole, void* valeur);
+char* getValeur(int addr);
 char* getValeurToPrint(char* symbole);
 bool alreadyDeclaredVar(char* symbole);
 int getIndice();

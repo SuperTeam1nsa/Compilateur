@@ -21,6 +21,9 @@ nom_variable [a-zA-Z][a-zA-Z0-9_]*
 %%
 
 {blancs}  { /* On ignore */ }
+"//".*   { /* On ignore le commentaire */ }
+[/][*][^*]*[*]+([^*/][^*]*[*]+)*[/] { /* On ignore le commentaire multiligne */ }
+[/][*] { printf("\033[01;31m"" [LEXER fatal error : Unterminated comment ]\033[0m");exit(-1);}
 "+"   {printf("tPLUS "); return(tPLUS);}
 "-"   {printf("tMOINS "); return(tMOINS);}
 "*"   {printf("tFOIS "); return(tFOIS);}

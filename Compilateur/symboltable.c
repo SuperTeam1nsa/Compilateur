@@ -31,7 +31,7 @@ int getIndice() {
 
 void deleteVarDepht(int depth){
 	int i=profondeur - 1;
-	printf("\n\n DEPTH :%d i :%d",depth, i);
+	//printf("\n\n DEPTH :%d i :%d",depth, i);
 		while(i >= 0 && tab[i].depth==depth) {
 			profondeur--;
 			free(tab[i].valeur);
@@ -62,6 +62,7 @@ int getType(char *id) {
 	exit(-1);
 }
 void setOpti(int o){OPTI=o;}
+
 int getAdresse(char *id,int depth) {
 	for (int i=profondeur - 1; i >= 0 ; i--) {
 		//si le nom de la variable correspond
@@ -110,43 +111,7 @@ void setValeurFloat(char* id, float valeur){
 		}
 		free(buffer);
 }
-/*
-void setValeurInt(char* id, int valeur){
-	char *buffer = malloc (sizeof (char) * 64);
-	snprintf(buffer, sizeof buffer, "%d", valeur);
-	bool found=false;
-	//printf("HERRRRRRRRRRRRRRRRRRR  + %s + %d",buffer,valeur);
-	for (int i=profondeur - 1; i >= 0 ; i--) {
-			if (strcmp(id, tab[i].id)==0) {
-				//printf(" \n \n FOUND + i : %d id: %s tabid: %s ",i,id,tab[i].id);
-				found=true;
-				tab[i].valeur=malloc (sizeof (char) * strlen(buffer));
-				strncpy(tab[i].valeur,buffer,sizeof(tab[i].valeur));
-			}
-		}
-		if(!found){
-			printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
-			exit(-1);
-		}
-}
-void setValeur(char* id, void* valeur){
-	char *buffer = malloc (sizeof (char) * 64);
-	for (int i=profondeur - 1; i >= 0 ; i--) {
-			if (strcmp(id, tab[i].id)==0) {
-				if(tab[i].type == INT_TYPE){
-					snprintf(buffer, sizeof buffer, "%d", *(int*)valeur);
-					strncpy(tab[i].valeur,buffer, strlen(buffer));
-				}else if(tab[i].type == FLOAT_TYPE){
-					snprintf(buffer, sizeof buffer, "%f", *(float*)valeur);
-					strncpy(tab[i].valeur,buffer, strlen(buffer));
-				}else if(tab[i].type == CHAR_TYPE){
-					strncpy(tab[i].valeur,(char*)valeur, strlen(buffer));
-				}
-			}
-		}
-	printf("Erreur fatale : pas de symbole \"%s\" dans la table", id);
-	exit(-1);
-}*/
+
 char* getValeurToPrint(char* id){
 	char *buffer = malloc (sizeof (char) * MAX_VAR_SIZE);
 	for (int i=profondeur - 1; i >= 0 ; i--) {
@@ -157,6 +122,17 @@ char* getValeurToPrint(char* id){
 			}
 	printf("\033[01;31m Erreur fatale : pas de symbole \"%s\" dans la table, hint: did you declare it first ? \033[0m", id);
 	exit(-1);
+}
+char* getValeur(int addr){
+	if(addr< 0 || addr >= SIZE || addr >= profondeur){
+			printf("\033[01;31m Erreur fatale : pas de symbole à l'addresse \"%d\" dans la table, hint: did you declare it first ? \033[0m", addr);
+			exit(-1);
+	}else{
+			char *buffer = malloc (sizeof (char) * MAX_VAR_SIZE);
+			snprintf(buffer, MAX_VAR_SIZE, "%s", tab[addr].valeur);
+			return buffer;
+	}
+
 }
 
 int ajouter(char id[16], float type, int init, bool isConst, int depth) {
