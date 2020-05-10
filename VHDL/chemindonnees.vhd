@@ -17,6 +17,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity chemindonnees is
 Port (  
     CLK : in  STD_LOGIC;
+    RST : in std_logic;
 	AOUT  : out std_logic_vector(7 downto 0);
 	BOUT  : out std_logic_vector(7 downto 0);
 
@@ -99,8 +100,118 @@ signal A_MEM : std_logic_vector(7 downto 0);
 signal OP_MEM : std_logic_vector(7 downto 0);
 signal B_MEM : std_logic_vector(7 downto 0);
 
+--Pour les signaux, j'ai mis tout 8bits 7-0. Tu es d'accord ? 
+
+signal S : std_logic_vector(7 downto 0);
+signal Ctrl_Alu : std_logic_vector(2 downto 0);
+signal W : STD_LOGIC;
+signal RW : STD_LOGIC;
+signal QA : STD_LOGIC_VECTOR(7 downto 0);
+signal QB : STD_LOGIC_VECTOR(7 downto 0);
+signal OUTS : STD_LOGIC_VECTOR(7 downto 0);
 
 begin
+-----------------------Instructions memoire Instanciation
+
+instructionsmemoire_inst : instructionsmemoire PORT MAP
+( Add : in  STD_LOGIC_VECTOR (7 downto 0);
+       CLK => CLK,
+       OUTS : out  STD_LOGIC_VECTOR (31 downto 0)); --OUT pas possible
+end component;
+
+-----------------------------------------------------------------------
+----------------------------------LI/DI
+-----------------------------------------------------------------------
+pipeline1 : pipeline1 PORT MAP (     
+           CLK => CLK,
+		   OP => CLK,
+           A => CLK,
+           B => CLK,
+           C => CLK,
+           OOP => OP_LI,
+           OA => A_LI,
+           OB => B_LI,
+           OC => C_LI);
+
+
+-----------------------Banc de Registres Instanciation
+
+ bancregistre_inst : bancregistre PORT MAP
+         ( A => B_LI(3 downto 0),
+           B => C_LI(3 downto 0),
+           addW => A_MEM(3 downto 0),
+           W => W,
+           Data => B_MEM,
+           RST => RST, 
+           CLK => CLK,
+           QA => QA,
+           QB => QB
+			  );
+-----------------------------------------------------------------------
+----------------------------------DI/EX
+-----------------------------------------------------------------------
+
+pipeline2 : pipeline1 PORT MAP (     
+           CLK => CLK,
+		   OP => OP_LI,
+           A => A_LI,
+           B => CLK,
+           C => CLK,
+           OOP => OP_DI,
+           OA => A_DI,
+           OB => B_DI,
+           OC => C_DI);
+
+-----------------------UAL Instanciation
+
+
+ual_inst : ual PORT MAP (
+           A => B_DI,
+           B => C_DI,
+           Ctrl_Alu => Ctrl_Alu,
+           S => S,
+           N => open,
+           O => open,
+           Z => open,
+           C => open);
+
+-----------------------------------------------------------------------
+----------------------------------EX/MEM
+-----------------------------------------------------------------------
+pipeline3 : pipeline1 PORT MAP (     
+           CLK => CLK,
+		   OP => OP_DI,
+           A => A_DI,
+           B => CLK,
+           C => CLK,
+           OOP => OP_EX,
+           OA => A_EX,
+           OB => B_EX,
+           OC => open);
+
+-----------------------Memoire de donnees Instanciation
+
+donneesmemoire_inst : donneesmemoire PORT MAP
+ (  Add => open;
+        INS => B_EX,
+        RW => RW, 
+        RST => RST,
+        CLK => CLK,
+        OUTS => OUTS);
+
+-----------------------------------------------------------------------
+----------------------------------MEM/RE
+-----------------------------------------------------------------------
+pipeline4 : pipeline1 PORT MAP (     
+           CLK => CLK,
+		   OP => OP_EX,
+           A => A_EX,
+           B => CLK,
+           C => CLK,
+           OOP => OP_MEM,
+           OA => A_MEM,
+           OB => B_MEM,
+           OC => open);
 
 
 end Behavioral;
