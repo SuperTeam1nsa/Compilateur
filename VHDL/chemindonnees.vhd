@@ -109,25 +109,32 @@ signal RW : STD_LOGIC;
 signal QA : STD_LOGIC_VECTOR(7 downto 0);
 signal QB : STD_LOGIC_VECTOR(7 downto 0);
 signal OUTS : STD_LOGIC_VECTOR(7 downto 0);
+signal MUX : STD_LOGIC_VECTOR(7 downto 0);
+signal MUX2 : STD_LOGIC_VECTOR(7 downto 0);
+signal MUX3 : STD_LOGIC_VECTOR(7 downto 0);
+signal AddMUX : STD_LOGIC_VECTOR(7 downto 0);
+
+signal temp : std_logic_vector(31 downto 0);
+	
+signal IP : std_logic_vector(7 downto 0);
 
 begin
 -----------------------Instructions memoire Instanciation
 
 instructionsmemoire_inst : instructionsmemoire PORT MAP
-( Add : in  STD_LOGIC_VECTOR (7 downto 0);
+( Add => IP,
        CLK => CLK,
-       OUTS : out  STD_LOGIC_VECTOR (31 downto 0)); --OUT pas possible
-end component;
+       OUTS => temp); 
 
 -----------------------------------------------------------------------
 ----------------------------------LI/DI
 -----------------------------------------------------------------------
 pipeline1 : pipeline1 PORT MAP (     
            CLK => CLK,
-		   OP => CLK,
-           A => CLK,
-           B => CLK,
-           C => CLK,
+	   OP => temp(31 downto 24),
+           A => temp(23 downto 16),
+           B => temp(15 downto 8),
+           C => temp(7 downto 0),
            OOP => OP_LI,
            OA => A_LI,
            OB => B_LI,
@@ -153,10 +160,10 @@ pipeline1 : pipeline1 PORT MAP (
 
 pipeline2 : pipeline1 PORT MAP (     
            CLK => CLK,
-		   OP => OP_LI,
+           OP => OP_LI,
            A => A_LI,
-           B => CLK,
-           C => CLK,
+           B => MUX,
+           C => QB,
            OOP => OP_DI,
            OA => A_DI,
            OB => B_DI,
@@ -180,10 +187,10 @@ ual_inst : ual PORT MAP (
 -----------------------------------------------------------------------
 pipeline3 : pipeline1 PORT MAP (     
            CLK => CLK,
-		   OP => OP_DI,
+	   OP => OP_DI,
            A => A_DI,
-           B => CLK,
-           C => CLK,
+           B => MUX2,
+           C => open,
            OOP => OP_EX,
            OA => A_EX,
            OB => B_EX,
@@ -192,7 +199,7 @@ pipeline3 : pipeline1 PORT MAP (
 -----------------------Memoire de donnees Instanciation
 
 donneesmemoire_inst : donneesmemoire PORT MAP
- (  Add => open;
+ (  Add => AddMUX;
         INS => B_EX,
         RW => RW, 
         RST => RST,
@@ -204,14 +211,46 @@ donneesmemoire_inst : donneesmemoire PORT MAP
 -----------------------------------------------------------------------
 pipeline4 : pipeline1 PORT MAP (     
            CLK => CLK,
-		   OP => OP_EX,
+	   OP => OP_EX,
            A => A_EX,
-           B => CLK,
-           C => CLK,
+           B => MUX3,
+           C => open,
            OOP => OP_MEM,
            OA => A_MEM,
            OB => B_MEM,
            OC => open);
+	
+-----------------------------------------------------------------------
+----------------------------------Partie sensible
+-----------------------------------------------------------------------
 
+----------------------------------Operations
+
+--On doit configurer W, RW, MUX, MUX2, MUX3, AddMUX, Ctrl_alu
+	
+--Ctrl_alu de l'UAL
+--Ctrl_Alu <= 
+	
+--W du Banc de Registres
+--W <=	
+	
+-- MUX MUX2 MUX3 et AddMUX
+--MUX <=
+--MUX2 <=
+--MUX3 <=
+--AddMUX <=
+	
+-- RW de Memoire de donnees
+--RW <=	
+----------------------------------Clock et incrementation du pointeur
+process 
+	begin
+		wait until CLK'event and CLK = '1';
+			if (RST = "0") then
+				IP <= x"00";
+			else
+				IP <= IP+1;
+			end if;
+	
 
 end Behavioral;
