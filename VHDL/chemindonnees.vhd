@@ -79,44 +79,44 @@ Port (     CLK : in  STD_LOGIC;
 end component;
 
 --On defini les signaux
-signal A_LI : std_logic_vector(7 downto 0);
-signal OP_LI : std_logic_vector(7 downto 0);
-signal B_LI : std_logic_vector(7 downto 0);
-signal C_LI : std_logic_vector(7 downto 0);
+signal A_LI : std_logic_vector(7 downto 0):= (others =>'0');
+signal OP_LI : std_logic_vector(7 downto 0):= (others =>'0');
+signal B_LI : std_logic_vector(7 downto 0):= (others =>'0');
+signal C_LI : std_logic_vector(7 downto 0):= (others =>'0');
 
 
-signal A_DI : std_logic_vector(7 downto 0);
-signal OP_DI : std_logic_vector(7 downto 0);
-signal B_DI : std_logic_vector(7 downto 0);
-signal C_DI : std_logic_vector(7 downto 0);
+signal A_DI : std_logic_vector(7 downto 0):= (others =>'0');
+signal OP_DI : std_logic_vector(7 downto 0):= (others =>'0');
+signal B_DI : std_logic_vector(7 downto 0):= (others =>'0');
+signal C_DI : std_logic_vector(7 downto 0):= (others =>'0');
 
 
-signal A_EXM : std_logic_vector(7 downto 0);
-signal OP_EX : std_logic_vector(7 downto 0);
-signal B_EX : std_logic_vector(7 downto 0);
+signal A_EXM : std_logic_vector(7 downto 0):= (others =>'0');
+signal OP_EX : std_logic_vector(7 downto 0):= (others =>'0');
+signal B_EX : std_logic_vector(7 downto 0):= (others =>'0');
 
 
-signal A_MEM : std_logic_vector(7 downto 0);
-signal OP_MEM : std_logic_vector(7 downto 0);
-signal B_MEM : std_logic_vector(7 downto 0);
+signal A_MEM : std_logic_vector(7 downto 0):= (others =>'0');
+signal OP_MEM : std_logic_vector(7 downto 0):= (others =>'0');
+signal B_MEM : std_logic_vector(7 downto 0):= (others =>'0');
 
 --Pour les signaux, j'ai mis tout 8bits 7-0. Tu es d'accord ? 
 
-signal S : std_logic_vector(7 downto 0);
-signal Ctrl_Alu : std_logic_vector(2 downto 0);
+signal S : std_logic_vector(7 downto 0):= (others =>'0');
+signal Ctrl_Alu : std_logic_vector(2 downto 0):= (others =>'0');
 signal W : STD_LOGIC;
 signal RW : STD_LOGIC;
-signal QA : STD_LOGIC_VECTOR(7 downto 0);
-signal QB : STD_LOGIC_VECTOR(7 downto 0);
-signal OUTS : STD_LOGIC_VECTOR(7 downto 0);
-signal MUX : STD_LOGIC_VECTOR(7 downto 0);
-signal MUX2 : STD_LOGIC_VECTOR(7 downto 0);
-signal MUX3 : STD_LOGIC_VECTOR(7 downto 0);
-signal AddMUX : STD_LOGIC_VECTOR(7 downto 0);
+signal QA : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
+signal QB : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
+signal OUTS : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
+signal MUX : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
+signal MUX2 : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
+signal MUX3 : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
+signal AddMUX : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
 
-signal temp : std_logic_vector(31 downto 0);
+signal temp : std_logic_vector(31 downto 0):= (others =>'0');
 	
-signal IP : std_logic_vector(7 downto 0);
+signal IP : std_logic_vector(7 downto 0):= (others =>'0');
 
 begin
 -----------------------Instructions memoire Instanciation
