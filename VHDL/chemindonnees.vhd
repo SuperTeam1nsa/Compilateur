@@ -111,8 +111,8 @@ signal QB : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
 signal OUTS : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
 signal MUX : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
 signal MUX2 : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
+signal MUX4 : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
 signal MUX3 : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
-signal AddMUX : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
 
 signal temp : std_logic_vector(31 downto 0):= (others =>'0');
 	
@@ -199,7 +199,7 @@ pipeline3 : pipeline1 PORT MAP (
 -----------------------Memoire de donnees Instanciation
 
 donneesmemoire_inst : donneesmemoire PORT MAP
- (  Add => AddMUX;
+ (  Add => MUX3;
         INS => B_EX,
         RW => RW, 
         RST => RST,
@@ -213,7 +213,7 @@ pipeline4 : pipeline1 PORT MAP (
            CLK => CLK,
 	   OP => OP_EX,
            A => A_EX,
-           B => MUX3,
+           B => MUX4,
            C => open,
            OOP => OP_MEM,
            OA => A_MEM,
@@ -229,19 +229,43 @@ pipeline4 : pipeline1 PORT MAP (
 --On doit configurer W, RW, MUX, MUX2, MUX3, AddMUX, Ctrl_alu
 	
 --Ctrl_alu de l'UAL
---Ctrl_Alu <= 
+
+--UAL
+Ctrl_Alu <= "000" when (OP_DI=X"01") else
+	 <= "001" when (OP_DI=X"02") else 
+	 <= "010" when (OP_DI=X"03") else
+	 <= "011" when (OP_DI=X"04") else 
+	 <= "111"; 
+	 
 	
 --W du Banc de Registres
---W <=	
+-- Correspond à LC sur le schema
+	
+--On fait que Write pour STORE, le reste 0
+W <= '1' when (OP_MEM=X"08" ) else '0';
+	
 	
 -- MUX MUX2 MUX3 et AddMUX
---MUX <=
---MUX2 <=
---MUX3 <=
---AddMUX <=
+
+--B_LI si Affectation + Load + Store
+MUX <= B_LI when (OP_LI=X"06" or OP_LI=X"07") else QA;   
+	
+--Pour toutes les opérations AL - ADD MUL SOU DIV
+MUX2 <= S when (OP_DI=X"01" or OP_DI=X"02" or OP_DI=X"03" or OP_DI=X"04") else B_DI;
+
+--mux3 -- Store 
+MUX3 <= A_EX when (OP_EX=X"08") else B_EX; 
+	
+--Memoire données - Si LOAD il me OUTS sinon B
+MUX4 <= OUTS when (OP_EX=X"07") else B_EX; 
+
 	
 -- RW de Memoire de donnees
---RW <=	
+-- LC sur le schema....
+--Ecriture pour STORE
+RW <= '0' when (OP_EX=X"08") else '1';
+
+	
 ----------------------------------Clock et incrementation du pointeur
 process 
 	begin
