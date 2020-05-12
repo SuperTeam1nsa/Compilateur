@@ -42,7 +42,7 @@ begin
 --https://www.xilinx.com/support/answers/45213.html
 --ATTENTION Si écriture et lecture sur le même registre alors on renvoie data
 	QA <= Data when addW = A AND W = '1' else
-			registr(to_integer(unsigned(A))) --when W = '0';
+			registr(to_integer(unsigned(A))); --when W = '0';
 	QB <= Data when addW = B AND W = '1' else
 			registr(to_integer(unsigned(B))); -- when W = '0';
 
