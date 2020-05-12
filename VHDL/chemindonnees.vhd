@@ -227,7 +227,7 @@ pipeline4 : pipeline1 PORT MAP (
 
 ----------------------------------Operations
 
---On doit configurer W, RW, MUX, MUX2, MUX3, AddMUX, Ctrl_alu
+--On doit configurer W, RW, MUX, MUX2, MUX3, MUX4, Ctrl_alu
 	
 --Ctrl_alu de l'UAL
 
@@ -246,7 +246,7 @@ Ctrl_Alu <= "000" when (OP_DI=X"01") else
 W <= '0' when (OP_MEM=X"08" ) else '1';
 	
 	
--- MUX MUX2 MUX3 et AddMUX
+-- MUX MUX2 MUX3 et MUX4
 
 --B_LI si Affectation + Load + Store
 MUX <= B_LI when (OP_LI=X"06" or OP_LI=X"07") else QA;   
