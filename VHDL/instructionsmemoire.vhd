@@ -28,8 +28,13 @@ signal instmemoire : memoiretableau := (others => (others => '0'));
 begin
 
 instmemoire(0)<=X"06050F00"; --AFC R5 15
-instmemoire(1)<=X"01050500"; --ADD R5 15
-instmemoire(2)<=X"05050600"; --ADD R5 15
+instmemoire(3)<= x"02020304"; -- MUL R2 R3 R4
+instmemoire(4)<= x"04020304"; -- DIV R2 R3 R4
+instmemoire(5)<= x"03020304"; -- SOU R2 R3 R4
+instmemoire(6)<= x"07054200"; -- LOAD R5 @66 _
+instmemoire(7)<= x"08420500"; -- STORE @66 R5 _
+instmemoire(2)<= x"01020304"; -- ADD R2 R3 R4
+
 
 --Comme pour la mémoire des données, la lecture se fera synchrone avec l'horloge CLK.
 	process
