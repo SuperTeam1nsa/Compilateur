@@ -45,6 +45,7 @@ begin
 				if RW='0' then
 				-- Dans le cas d'une écriture, le contenu de l'entrée IN est copié dans la mémoire à l'adresse @
 					data(to_integer(unsigned(Add))) <= INS;
+					OUTS <= x"00";
 				else 
 					OUTS <= data(to_integer(unsigned(Add)));
 				end if;				
