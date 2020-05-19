@@ -80,13 +80,13 @@ Port (     CLK : in  STD_LOGIC;
            OC : out  STD_LOGIC_VECTOR (7 downto 0));
 end component;
 
-	component compteur is
-		Port ( CLK : in  STD_LOGIC;
-			EN : in  STD_LOGIC; 
-			SENS : in  STD_LOGIC;
-			RST : in  STD_LOGIC; 
-			Dout : out  STD_LOGIC_VECTOR (7 downto 0));
-	end component;
+--	component compteur is
+--		Port ( CLK : in  STD_LOGIC;
+--			EN : in  STD_LOGIC; 
+--			SENS : in  STD_LOGIC;
+--			RST : in  STD_LOGIC; 
+--			Dout : out  STD_LOGIC_VECTOR (7 downto 0));
+--	end component;
 
 --On defini les signaux
 signal A_LI : std_logic_vector(7 downto 0):= (others =>'0');
@@ -131,12 +131,12 @@ signal IP : std_logic_vector(7 downto 0):= (others =>'0');
 begin
 -----------------------Instructions memoire Instanciation
 
-compt: compteur port map (
-		CLK => CLK,
-		EN => '0',  
-		SENS => '1',  
-		RST => RST,  
-		Dout => IP);
+--compt: compteur port map (
+--		CLK => CLK,
+--		EN => '0',  
+--		SENS => '1',  
+--		RST => RST,  
+--		Dout => IP);
 		
 instructionsmemoire_inst : instructionsmemoire PORT MAP
 ( Add => IP,
