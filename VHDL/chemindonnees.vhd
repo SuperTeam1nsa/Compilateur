@@ -207,7 +207,7 @@ pipeline3 : pipeline1 PORT MAP (
 	        OP => OP_DI,
            A => A_DI,
            B => MUX2,
-           C => C_DI, -- peu importe
+           C => x"00", -- peu importe
            OOP => OP_EX,
            OA => A_EX,
            OB => B_EX,
@@ -231,7 +231,7 @@ pipeline4 : pipeline1 PORT MAP (
 	        OP => OP_EX,
            A => A_EX,
            B => MUX4,
-           C => A_EX, --Peu importe
+           C => x"00", --Peu importe
            OOP => OP_MEM,
            OA => A_MEM,
            OB => B_MEM,
@@ -242,6 +242,15 @@ pipeline4 : pipeline1 PORT MAP (
 -----------------------------------------------------------------------
 
 ----------------------------------Operations
+	
+--test
+	
+process 
+	begin
+		wait until CLK'event and CLK = '1';
+			if (RST = '0') then
+				IP <= x"00";
+			else
 
 --On doit configurer W, RW, MUX, MUX2, MUX3, MUX4, Ctrl_alu
 	
@@ -288,10 +297,10 @@ RW <= '0' when (OP_EX=X"08") else '1';
 --	begin
 --		wait until CLK'event and CLK = '1';
 --			if (RST = '0') then
---				IP <= x"00";
+--				IP <= x"01";
 --			else
---				IP <= IP+ x"01";
---			end if;
---end process;
+--				IP <= IP+ 1;
+			end if;
+end process;
 
 end Behavioral;
