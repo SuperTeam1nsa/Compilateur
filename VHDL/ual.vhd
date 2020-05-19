@@ -30,7 +30,7 @@ end ual;
 
 architecture Behavioral of ual is
 
-signal result : STD_LOGIC_VECTOR(15 downto 0);
+signal result : STD_LOGIC_VECTOR(15 downto 0) :=(others => '0');
 	
 begin
 

@@ -17,22 +17,22 @@ use IEEE.NUMERIC_STD.ALL;
 
 
 entity bancregistre is
-    Port ( A : in  STD_LOGIC_VECTOR (3 downto 0);
-           B : in  STD_LOGIC_VECTOR (3 downto 0);
-           addW : in  STD_LOGIC_VECTOR (3 downto 0);
+    Port ( A : in  STD_LOGIC_VECTOR (3 downto 0) ;
+           B : in  STD_LOGIC_VECTOR (3 downto 0) ;
+           addW : in  STD_LOGIC_VECTOR (3 downto 0) ;
            W : in  STD_LOGIC;  
            Data : in  STD_LOGIC_VECTOR (7 downto 0);
            RST : in  STD_LOGIC;  
            CLK : in  STD_LOGIC;
-           QA : out  STD_LOGIC_VECTOR (7 downto 0);
-           QB : out  STD_LOGIC_VECTOR (7 downto 0)
+           QA : out  STD_LOGIC_VECTOR (7 downto 0) :=(others => '0');
+           QB : out  STD_LOGIC_VECTOR (7 downto 0) :=(others => '0')
 			  );
 end bancregistre;
 
 architecture Behavioral of bancregistre is
 
 type registreTableau is array (integer range 255 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
-signal registr : registreTableau; --Attention on peut pas utiliser registre sinon error
+signal registr : registreTableau := (others => (others => '0')); --Attention on peut pas utiliser registre sinon error
 
 begin
 --Partie Asynchrone
@@ -42,9 +42,9 @@ begin
 --https://www.xilinx.com/support/answers/45213.html
 --ATTENTION Si écriture et lecture sur le même registre alors on renvoie data
 	QA <= Data when addW = A AND W = '1' else
-			registr(to_integer(unsigned(A))); --when W = '0';
+			registr(to_integer(unsigned(A(3 downto 0)))); --when W = '0';
 	QB <= Data when addW = B AND W = '1' else
-			registr(to_integer(unsigned(B))); -- when W = '0';
+			registr(to_integer(unsigned(B(3 downto 0)))); -- when W = '0';
 
 
 --On considère que le reset et l'écriture se feront synchrone avec l'horloge.
@@ -57,7 +57,7 @@ begin
 			else
 -- Cette entrée est active à 1, pour une écriture. Lorsque l'écriture est activée, les données présentent sur l'entrée DATA sont copiées dans le registre d'adresse @W
 				if W = '1' then
-					registr(to_integer(unsigned(addW))) <= Data;
+					registr(to_integer(unsigned(addW(3 downto 0)))) <= Data;
 				end if;
 			end if;
 		

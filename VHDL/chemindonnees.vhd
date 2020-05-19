@@ -52,13 +52,14 @@ component ual
            C : out  STD_LOGIC);
 end component;
 
-component donneesmemoire
+component donnessmemoire is
 Port (  Add : in  STD_LOGIC_VECTOR (7 downto 0);
         INS : in  STD_LOGIC_VECTOR (7 downto 0); --IN pas possible
         RW : in  STD_LOGIC; 
         RST : in  STD_LOGIC;
         CLK : in  STD_LOGIC;
         OUTS : out  STD_LOGIC_VECTOR (7 downto 0)); --OUT pas possible
+
 end component;
 
 component instructionsmemoire
@@ -78,6 +79,14 @@ Port (     CLK : in  STD_LOGIC;
            OB : out  STD_LOGIC_VECTOR (7 downto 0);
            OC : out  STD_LOGIC_VECTOR (7 downto 0));
 end component;
+
+	component compteur is
+		Port ( CLK : in  STD_LOGIC;
+			EN : in  STD_LOGIC; 
+			SENS : in  STD_LOGIC;
+			RST : in  STD_LOGIC; 
+			Dout : out  STD_LOGIC_VECTOR (7 downto 0));
+	end component;
 
 --On defini les signaux
 signal A_LI : std_logic_vector(7 downto 0):= (others =>'0');
@@ -122,6 +131,13 @@ signal IP : std_logic_vector(7 downto 0):= (others =>'0');
 begin
 -----------------------Instructions memoire Instanciation
 
+compt: compteur port map (
+		CLK => CLK,
+		EN => '0',  
+		SENS => '1',  
+		RST => RST,  
+		Dout => IP);
+		
 instructionsmemoire_inst : instructionsmemoire PORT MAP
 ( Add => IP,
        CLK => CLK,
@@ -199,7 +215,7 @@ pipeline3 : pipeline1 PORT MAP (
 
 -----------------------Memoire de donnees Instanciation
 
-donneesmemoire_inst : donneesmemoire PORT MAP
+donneesmemoire_inst : donnessmemoire PORT MAP
  (  Add => MUX3,
         INS => B_EX,
         RW => RW, 
@@ -268,14 +284,14 @@ RW <= '0' when (OP_EX=X"08") else '1';
 
 	
 ----------------------------------Clock et incrementation du pointeur
-process 
-	begin
-		wait until CLK'event and CLK = '1';
-			if (RST = '0') then
-				IP <= x"00";
-			else
-				IP <= IP+1;
-			end if;
-end process;
+--process 
+--	begin
+--		wait until CLK'event and CLK = '1';
+--			if (RST = '0') then
+--				IP <= x"00";
+--			else
+--				IP <= IP+ x"01";
+--			end if;
+--end process;
 
 end Behavioral;

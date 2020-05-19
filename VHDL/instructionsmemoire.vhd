@@ -26,6 +26,11 @@ signal instmemoire : memoiretableau := (others => (others => '0'));
 --:= ( "10000000000000001000000000000000","10000000000000001000000000000000",...,""); #codeOperation operandeA OperandeB OperandeC: 8x4=32
 
 begin
+
+instmemoire(0)<=X"06050F00"; --AFC R5 15
+instmemoire(1)<=X"01050500"; --ADD R5 15
+instmemoire(2)<=X"05050600"; --ADD R5 15
+
 --Comme pour la mémoire des données, la lecture se fera synchrone avec l'horloge CLK.
 	process
 	begin

@@ -25,7 +25,7 @@ end donnessmemoire;
 architecture Behavioral of donnessmemoire is
 --Meme methode que la memoire d'instruction
 type memoiretableau is array (integer range 255 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
-signal donnmemoire : memoiretableau := (others => (others => '0'));
+signal data : memoiretableau := (others => (others => '0'));
 
 begin
 
@@ -39,14 +39,14 @@ begin
 
 -- Le reset, RST, permettra d'initialiser le contenu de la mémoire à 0x00
 			if RST='0' then
-				donnmemoire <= (others=>(others=>'0'));
+				data <= (others=>(others=>'0'));
 			else	
 -- Pour réaliser une lecture, RW doit être positionné à 1 et pour réaliser une écriture, RW doit être positionné à 0
 				if RW='0' then
 				-- Dans le cas d'une écriture, le contenu de l'entrée IN est copié dans la mémoire à l'adresse @
-					donnmemoire(to_integer(unsigned(Add))) <= INS;
+					data(to_integer(unsigned(Add))) <= INS;
 				else 
-					OUTS <= donnmemoire(to_integer(unsigned(Add)));
+					OUTS <= data(to_integer(unsigned(Add)));
 				end if;				
 			end if;
 		
