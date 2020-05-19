@@ -2,8 +2,8 @@
 
 library IEEE;
 --use IEEE.STD_LOGIC_ARITH.ALL;
---use IEEE.STD_LOGIC_UNSIGNED.ALL;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+--use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,7 +31,8 @@ end bancregistre;
 
 architecture Behavioral of bancregistre is
 
-type registreTableau is array (integer range 255 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
+--type registreTableau is array (integer range 255 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
+type registreTableau is array (integer range 15 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
 signal registr : registreTableau := (others => (others => '0')); --Attention on peut pas utiliser registre sinon error
 
 begin
