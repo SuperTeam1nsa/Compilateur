@@ -127,11 +127,12 @@ signal MUX4 : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
 signal temp : std_logic_vector(31 downto 0):= (others =>'0');
 	
 signal IP : std_logic_vector(7 downto 0):= (others =>'0');
+--signal next_IP : STD_LOGIC_VECTOR (7 downto 0); -----------------TEST 1
 
 begin
 -----------------------Instructions memoire Instanciation
 
---compt: compteur port map (
+--compt: compteur port map ( ---------------------------------------TEST 2
 --		CLK => CLK,
 --		EN => '0',  
 --		SENS => '1',  
@@ -243,7 +244,7 @@ pipeline4 : pipeline1 PORT MAP (
 
 ----------------------------------Operations
 	
---test
+---------------------------------------------------------------------------test3
 	
 process 
 	begin
@@ -300,7 +301,9 @@ RW <= '0' when (OP_EX=X"08") else '1';
 --				IP <= x"01";
 --			else
 --				IP <= IP+ 1;
+		  		--next_IP <= std_logic_vector(unsigned(IP) + 1);
 			end if;
 end process;
-
+--                                IP <= next_IP;
+		  
 end Behavioral;
