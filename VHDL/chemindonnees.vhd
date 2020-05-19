@@ -1,13 +1,13 @@
 --En cours
 
 library IEEE;
-use IEEE.STD_LOGIC_ARITH.ALL;
+--use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
@@ -246,12 +246,12 @@ pipeline4 : pipeline1 PORT MAP (
 	
 ---------------------------------------------------------------------------test3
 	
-process 
-	begin
-		wait until CLK'event and CLK = '1';
-			if (RST = '0') then
-				IP <= x"00";
-			else
+--process 
+--	begin
+--		wait until CLK'event and CLK = '1';
+--			if (RST = '0') then
+--				IP <= x"00";
+--			else
 
 --On doit configurer W, RW, MUX, MUX2, MUX3, MUX4, Ctrl_alu
 	
@@ -294,13 +294,13 @@ RW <= '0' when (OP_EX=X"08") else '1';
 
 	
 ----------------------------------Clock et incrementation du pointeur
---process 
---	begin
---		wait until CLK'event and CLK = '1';
---			if (RST = '0') then
---				IP <= x"01";
---			else
---				IP <= IP+ 1;
+process 
+	begin
+		wait until CLK'event and CLK = '1';
+			if (RST = '0') then
+				IP <= x"01";
+			else
+				IP <= IP+ 1;
 		  		--next_IP <= std_logic_vector(unsigned(IP) + 1);
 			end if;
 end process;
