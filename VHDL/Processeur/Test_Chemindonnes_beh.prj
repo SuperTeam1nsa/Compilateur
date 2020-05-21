@@ -1,0 +1,7 @@
+vhdl work "../ual.vhd"
+vhdl work "../pipeline1.vhd"
+vhdl work "../instructionsmemoire.vhd"
+vhdl work "../donneesmemoire.vhd"
+vhdl work "../bancregistre.vhd"
+vhdl work "../chemindonnees.vhd"
+vhdl work "../Test_Chemindonnes.vhd"

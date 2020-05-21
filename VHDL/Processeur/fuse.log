@@ -1,0 +1,35 @@
+Running: /usr/local/insa/Xilinx.ISE/13.4/ISE_DS/ISE/bin/lin64/unwrapped/fuse -intstyle ise -incremental -lib secureip -o /home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/Test_Chemindonnes_isim_beh.exe -prj /home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/Test_Chemindonnes_beh.prj work.Test_Chemindonnes 
+ISim O.87xd (signature 0x8ddf5b5d)
+Number of CPUs detected in this system: 40
+Turning on mult-threading, number of parallel sub-compilation jobs: 80 
+Determining compilation order of HDL files
+Parsing VHDL file "/home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/../ual.vhd" into library work
+Parsing VHDL file "/home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/../pipeline1.vhd" into library work
+Parsing VHDL file "/home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/../instructionsmemoire.vhd" into library work
+Parsing VHDL file "/home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/../donneesmemoire.vhd" into library work
+Parsing VHDL file "/home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/../bancregistre.vhd" into library work
+Parsing VHDL file "/home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/../chemindonnees.vhd" into library work
+Parsing VHDL file "/home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/../Test_Chemindonnes.vhd" into library work
+Starting static elaboration
+Completed static elaboration
+Fuse Memory Usage: 98496 KB
+Fuse CPU Usage: 1050 ms
+Compiling package standard
+Compiling package std_logic_1164
+Compiling package std_logic_arith
+Compiling package std_logic_unsigned
+Compiling package numeric_std
+Compiling architecture behavioral of entity instructionsmemoire [instructionsmemoire_default]
+Compiling architecture behavioral of entity pipeline1 [pipeline1_default]
+Compiling architecture behavioral of entity bancregistre [bancregistre_default]
+Compiling architecture behavioral of entity ual [ual_default]
+Compiling architecture behavioral of entity donnessmemoire [donnessmemoire_default]
+Compiling architecture behavioral of entity chemindonnees [chemindonnees_default]
+Compiling architecture behavior of entity test_chemindonnes
+Time Resolution for simulation is 1ps.
+Waiting for 1 sub-compilation(s) to finish...
+Compiled 18 VHDL Units
+Built simulation executable /home/hsahraou/Bureau/4A/COMPILATEUR/Compilateur/Compilateur/VHDL/Processeur/Test_Chemindonnes_isim_beh.exe
+Fuse Memory Usage: 5393252 KB
+Fuse CPU Usage: 1280 ms
+GCC CPU Usage: 560 ms

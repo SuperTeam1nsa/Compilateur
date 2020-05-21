@@ -1,0 +1,7 @@
+vhdl isim_temp "../ual.vhd"
+vhdl isim_temp "../pipeline1.vhd"
+vhdl isim_temp "../instructionsmemoire.vhd"
+vhdl isim_temp "../donneesmemoire.vhd"
+vhdl isim_temp "../bancregistre.vhd"
+vhdl isim_temp "../chemindonnees.vhd"
+vhdl isim_temp "../Test_Chemindonnes.vhd"
