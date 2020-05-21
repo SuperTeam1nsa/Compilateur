@@ -23,15 +23,15 @@ entity bancregistre is
            Data : in  STD_LOGIC_VECTOR  (7 downto 0);
            RST : in  STD_LOGIC;  
            CLK : in  STD_LOGIC;
-           QA : out  STD_LOGIC_VECTOR  (7 downto 0) :=(others => '0');
-           QB : out  STD_LOGIC_VECTOR  (7 downto 0) :=(others => '0')
+           QA : out  STD_LOGIC_VECTOR  (7 downto 0);
+           QB : out  STD_LOGIC_VECTOR  (7 downto 0)
 			  );
 end bancregistre;
 
 architecture Behavioral of bancregistre is
 
 --type registreTableau is array (integer range 255 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
-type registreTableau is array (integer range 15 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
+type registreTableau is array (range 0 downto 15) of STD_LOGIC_VECTOR(7 downto 0);
 signal registr : registreTableau := (others => (others => '0')); --Attention on peut pas utiliser registre sinon error
 
 begin
