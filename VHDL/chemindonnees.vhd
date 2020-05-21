@@ -89,42 +89,42 @@ end component;
 --	end component;
 
 --On defini les signaux
-signal A_LI : std_logic_vector(7 downto 0):= (others =>'0');
-signal OP_LI : std_logic_vector(7 downto 0):= (others =>'0');
-signal B_LI : std_logic_vector(7 downto 0):= (others =>'0');
-signal C_LI : std_logic_vector(7 downto 0):= (others =>'0');
+signal A_LI : std_logic_vector(7 downto 0);
+signal OP_LI : std_logic_vector(7 downto 0);
+signal B_LI : std_logic_vector(7 downto 0);
+signal C_LI : std_logic_vector(7 downto 0);
 
 
-signal A_DI : std_logic_vector(7 downto 0):= (others =>'0');
-signal OP_DI : std_logic_vector(7 downto 0):= (others =>'0');
-signal B_DI : std_logic_vector(7 downto 0):= (others =>'0');
-signal C_DI : std_logic_vector(7 downto 0):= (others =>'0');
+signal A_DI : std_logic_vector(7 downto 0);
+signal OP_DI : std_logic_vector(7 downto 0);
+signal B_DI : std_logic_vector(7 downto 0);
+signal C_DI : std_logic_vector(7 downto 0);
 
 
-signal A_EX : std_logic_vector(7 downto 0):= (others =>'0');
-signal OP_EX : std_logic_vector(7 downto 0):= (others =>'0');
-signal B_EX : std_logic_vector(7 downto 0):= (others =>'0');
+signal A_EX : std_logic_vector(7 downto 0);
+signal OP_EX : std_logic_vector(7 downto 0);
+signal B_EX : std_logic_vector(7 downto 0);
 
 
-signal A_MEM : std_logic_vector(7 downto 0):= (others =>'0');
-signal OP_MEM : std_logic_vector(7 downto 0):= (others =>'0');
-signal B_MEM : std_logic_vector(7 downto 0):= (others =>'0');
+signal A_MEM : std_logic_vector(7 downto 0);
+signal OP_MEM : std_logic_vector(7 downto 0);
+signal B_MEM : std_logic_vector(7 downto 0);
 
 --Pour les signaux, j'ai mis tout 8bits 7-0. Tu es d'accord ? 
 
-signal S : std_logic_vector(7 downto 0):= (others =>'0');
-signal Ctrl_Alu : std_logic_vector(2 downto 0):= (others =>'0');
+signal S : std_logic_vector(7 downto 0);
+signal Ctrl_Alu : std_logic_vector(2 downto 0);
 signal W : STD_LOGIC;
 signal RW : STD_LOGIC;
-signal QA : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
-signal QB : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
-signal OUTS : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
-signal MUX : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
-signal MUX2 : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
-signal MUX3 : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
-signal MUX4 : STD_LOGIC_VECTOR(7 downto 0):= (others =>'0');
+signal QA : STD_LOGIC_VECTOR(7 downto 0);
+signal QB : STD_LOGIC_VECTOR(7 downto 0);
+signal OUTS : STD_LOGIC_VECTOR(7 downto 0);
+signal MUX : STD_LOGIC_VECTOR(7 downto 0);
+signal MUX2 : STD_LOGIC_VECTOR(7 downto 0);
+signal MUX3 : STD_LOGIC_VECTOR(7 downto 0);
+signal MUX4 : STD_LOGIC_VECTOR(7 downto 0);
 
-signal temp : std_logic_vector(31 downto 0):= (others =>'0');
+signal temp : std_logic_vector(31 downto 0);
 	
 signal IP : std_logic_vector(7 downto 0):= (others =>'0');
 --signal next_IP : STD_LOGIC_VECTOR (7 downto 0); -----------------TEST 1
@@ -249,18 +249,18 @@ pipeline4 : pipeline1 PORT MAP (
 	
 ---------------------------------------------------------------------------test3
 	
-process 
-	begin
-		wait until CLK'event and CLK = '1';
+--process 
+--	begin
+--		wait until CLK'event and CLK = '1';
 		
-			if (RST = '0') then
-				RST1 <= '0';
-				RST2 <= '0';				
-				IP <= x"01";
-			else
-				RST1 <= '1';
-				RST2 <= '1';
-				IP <= std_logic_vector(unsigned(IP) + 1);
+--			if (RST = '0') then
+--				RST1 <= '0';
+--				RST2 <= '0';				
+--				IP <= x"01";
+--			else
+--				RST1 <= '1';
+--				RST2 <= '1';
+--				IP <= std_logic_vector(unsigned(IP) + 1);
 	--		end if;
 			--	IP <= IP + 1;
 
@@ -269,95 +269,97 @@ process
 --Ctrl_alu de l'UAL
 
 --UAL
---Ctrl_Alu <= "000" when (OP_DI=X"01") else
---	  "001" when (OP_DI=X"02") else 
---	  "010" when (OP_DI=X"03") else
---	  "011" when (OP_DI=X"04") else 
---	  "111"; 
-			if (OP_DI=X"01") then
-				Ctrl_Alu <= "000";
-			elsif (OP_DI=X"02") then
-				Ctrl_Alu <= "001";
-			elsif (OP_DI=X"03") then
-				Ctrl_Alu <= "010";
-			else 
-				Ctrl_Alu <= "111";
-			end if;
+Ctrl_Alu <= "000" when (OP_DI=X"01") else
+	  "001" when (OP_DI=X"02") else 
+	  "010" when (OP_DI=X"03") else
+	  "011" when (OP_DI=X"04") else 
+	  "111"; 
+--			if (OP_DI=X"01") then
+--				Ctrl_Alu <= "000";
+--			elsif (OP_DI=X"02") then
+--				Ctrl_Alu <= "001";
+--			elsif (OP_DI=X"03") then
+--				Ctrl_Alu <= "010";
+--			else 
+--				Ctrl_Alu <= "111";
+--			end if;
 	
 --W du Banc de Registres
 -- Correspond à LC sur le schema
 	
 --On fait que Write pour le reste, 0 pour store
---W <= '0' when (OP_MEM=X"08" ) else '1';
+W <= '0' when (OP_MEM=X"08" ) else '1';
 	
-	if (OP_MEM=X"08") then
-		W <= '0';
-	else 
-		W <='1';
-	end if;
+--	if (OP_MEM=X"08") then
+--		W <= '0';
+--	else 
+--		W <='1';
+--	end if;
 	
 -- MUX MUX2 MUX3 et MUX4
 
 --B_LI si Affectation + Load + Store
---MUX <= B_LI when (OP_LI=X"06" or OP_LI=X"07") else QA; 
+MUX <= B_LI when (OP_LI=X"06" or OP_LI=X"07") else QA; 
 
-	if (OP_LI=X"06" or OP_LI=X"07") then
-		MUX <= B_LI;
-	else 
-		MUX <= QA;
-	end if;  
+--	if (OP_LI=X"06" or OP_LI=X"07") then
+--		MUX <= B_LI;
+--	else 
+--		MUX <= QA;
+--	end if;  
 	
 --Pour toutes les opérations AL - ADD MUL SOU DIV
---MUX2 <= S when (OP_DI=X"01" or OP_DI=X"02" or OP_DI=X"03" or OP_DI=X"04") else B_DI;
+MUX2 <= S when (OP_DI=X"01" or OP_DI=X"02" or OP_DI=X"03" or OP_DI=X"04") else B_DI;
 
-	if (OP_DI=X"01" or OP_DI=X"02" or OP_DI=X"03" or OP_DI=X"04") then
-		MUX2 <= S;
-	else 
-		MUX2 <= B_DI;
-	end if; 
+--	if (OP_DI=X"01" or OP_DI=X"02" or OP_DI=X"03" or OP_DI=X"04") then
+--		MUX2 <= S;
+--	else 
+--		MUX2 <= B_DI;
+--	end if; 
 
 --mux3 -- Store 
---MUX3 <= A_EX when (OP_EX=X"08") else B_EX; 
+MUX3 <= A_EX when (OP_EX=X"08") else B_EX; 
 
-	if (OP_EX=X"08") then
-		MUX3 <= A_EX;
-	else 
-		MUX3 <= B_EX;
-	end if; 
+--	if (OP_EX=X"08") then
+--		MUX3 <= A_EX;
+--	else 
+--		MUX3 <= B_EX;
+--	end if; 
 	
 --Memoire données - Si LOAD il me OUTS sinon B
---MUX4 <= OUTS when (OP_EX=X"07") else B_EX; 
+MUX4 <= OUTS when (OP_EX=X"07") else B_EX; 
 
-	if (OP_EX=X"07") then
-		MUX4 <= OUTS;
-	else 
-		MUX4 <= B_EX;
-	end if; 
+--	if (OP_EX=X"07") then
+--		MUX4 <= OUTS;
+--	else 
+--		MUX4 <= B_EX;
+--	end if; 
 	
 -- RW de Memoire de donnees
 -- LC sur le schema....
 --Ecriture pour STORE
---RW <= '0' when (OP_EX=X"08") else '1';
+RW <= '0' when (OP_EX=X"08") else '1';
 
-	if (OP_EX=X"08") then
-		RW <= '0';
-	else 
-		RW <= '1';
-	end if; 
+--	if (OP_EX=X"08") then
+--		RW <= '0';
+--	else 
+--		RW <= '1';
+--	end if; 
 
-end if;
-end process;
-----------------------------------Clock et incrementation du pointeur
---process 
---	begin
---		wait until CLK'event and CLK = '1';
---if (RST = '0') then
-			--	IP <= x"01";
-			--else
-				--IP <= IP+ 1;
---		  		next_IP <= std_logic_vector(unsigned(IP) + 1);
-			--end if;
+--end if;
 --end process;
- --                              IP <= next_IP;
+----------------------------------Clock et incrementation du pointeur
+process 
+	begin
+		wait until CLK'event and CLK = '1';
+		if (RST = '0') then
+				RST1 <= '0';
+ 			   RST2 <= '0';				
+			   IP <= x"01";
+			else
+				IP <= std_logic_vector(unsigned(IP) + 1);
+	  	--	next_IP <= std_logic_vector(unsigned(IP) + 1);
+			end if;
+end process;
+        --                      IP <= next_IP;
 		  
 end Behavioral;

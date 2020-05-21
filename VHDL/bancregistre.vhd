@@ -31,7 +31,7 @@ end bancregistre;
 architecture Behavioral of bancregistre is
 
 --type registreTableau is array (integer range 255 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
-type registreTableau is array (range 0 downto 15) of STD_LOGIC_VECTOR(7 downto 0);
+type registreTableau is array (0 to 15) of STD_LOGIC_VECTOR(7 downto 0);
 signal registr : registreTableau := (others => (others => '0')); --Attention on peut pas utiliser registre sinon error
 
 begin

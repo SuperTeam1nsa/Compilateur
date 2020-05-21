@@ -25,7 +25,7 @@ end donnessmemoire;
 
 architecture Behavioral of donnessmemoire is
 --Meme methode que la memoire d'instruction
-type memoiretableau is array (range 0 downto 255) of STD_LOGIC_VECTOR(7 downto 0);
+type memoiretableau is array (0 to 255) of STD_LOGIC_VECTOR(7 downto 0);
 signal data : memoiretableau := (others => (others => '0'));
 
 begin
