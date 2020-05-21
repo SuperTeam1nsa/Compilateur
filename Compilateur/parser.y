@@ -296,7 +296,7 @@ If :tIF tOP {if(OPTI){
 		activeInstruction=0;}
 		}
 		Expression tCP {
-		tempAddr=getIndice()+1;
+		tempAddr=getIndice();//+1;
 			/*GENERER JMF */ 
 			if(OPTI){
 				depth++;
@@ -360,7 +360,7 @@ Instruction:
 			exit(-1);
 		}
 		}
-		tempAddr=getIndice()+1;
+		tempAddr=getIndice();//+1;
    } Instruction
  | tVAR tMOINS tMOINS tVIRG {wasInActifState=activeInstruction;if(OPTI)activeInstruction=0;}{
  		if(wasInActifState){
@@ -396,7 +396,7 @@ Instruction:
 			exit(-1);
 		}
 		}
-		tempAddr=getIndice()+1;
+		tempAddr=getIndice();//+1;
    } Instruction
   |Type tVAR tEGAL{wasInActifState=activeInstruction;if(OPTI)activeInstruction=0;} Expression tVIRG {
 		if(wasInActifState){
@@ -423,7 +423,7 @@ Instruction:
 		AutreOperation("AFC",varAddr, (float)$<s>5.FLOAT);
 		}
 		}
-		tempAddr=getIndice()+1;
+		tempAddr=getIndice();//+1;
   } Instruction
 | Type tCONST tVAR tEGAL {wasInActifState=activeInstruction;if(OPTI)activeInstruction=0;} Expression tVIRG {
 		if(wasInActifState){
@@ -446,7 +446,7 @@ Instruction:
 			AutreOperation("AFC",varAddr, (float)$<s>6.FLOAT);
 		}
 		}
-		tempAddr=getIndice()+1;
+		tempAddr=getIndice();//+1;
   } Instruction
  | tCONST Type tVAR tEGAL{wasInActifState=activeInstruction;if(OPTI)activeInstruction=0;} Expression tVIRG {
  		if(wasInActifState){
@@ -469,7 +469,7 @@ Instruction:
 			AutreOperation("AFC",varAddr, (float)$<s>6.FLOAT);
 		}
 		}
-		tempAddr=getIndice()+1;
+		tempAddr=getIndice();//+1;
   } Instruction
 | Type tVAR tVIRG {
 		if(activeInstruction){
@@ -514,11 +514,11 @@ Instruction:
 			AutreOperation("AFC",varAddr, (float)$<s>4.FLOAT);
 		}
 		}
-		tempAddr=getIndice()+1;
+		tempAddr=getIndice();//+1;
   }Instruction
 | If Else Instruction
 | If Instruction
-| tDO { if(activeInstruction)loopStart();OPTI=0;/*pas d'opti de boucle*/} Body tWHILE tOP Expression tCP {if(activeInstruction)loopEnd();OPTI=user_want_opti;tempAddr=getIndice()+1;} tVIRG Instruction
+| tDO { if(activeInstruction)loopStart();OPTI=0;/*pas d'opti de boucle*/} Body tWHILE tOP Expression tCP {if(activeInstruction)loopEnd();OPTI=user_want_opti;tempAddr=getIndice();} tVIRG Instruction
 | tPRINTF tOP tVAR { if(activeInstruction){PrintfOperation($3, getValeurToPrint($3),getAdresse($3,depth) );}}tCP tVIRG Instruction 
 | tRETURN tVAR tVIRG {
 		if(activeInstruction){

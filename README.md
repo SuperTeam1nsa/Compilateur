@@ -57,7 +57,7 @@ ou `./runfull.sh codeC/le_fichier_c_voulu.c [Mode_optimise]` selon votre OS.
 **Remarque:** les boucles ne sont pas optimisées et les vérifications d'erreurs C sont moins nombreuses dans ce mode
 
 ## Tests d'erreurs réalisés:  
-*  Réaffectation d'une variable => Erreur fatale
+*  Réaffectation d'une variable constante => Erreur fatale
 *  char de plus de un character (va etre tronqué) => warning
 *  return d'une variable non-initialisé => warning
 *  return sur une void function => Erreur fatale
