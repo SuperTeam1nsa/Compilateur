@@ -21,7 +21,7 @@ end instructionsmemoire;
 
 architecture Behavioral of instructionsmemoire is
 --Meme methode que le banc de registre
-type memoiretableau is array (integer range 255 downto 0) of STD_LOGIC_VECTOR(31 downto 0);
+type memoiretableau is array (range 0 downto 255) of STD_LOGIC_VECTOR(31 downto 0);
 signal instmemoire : memoiretableau := (others => (others => '0'));
 --:= ( "10000000000000001000000000000000","10000000000000001000000000000000",...,""); #codeOperation operandeA OperandeB OperandeC: 8x4=32
 
