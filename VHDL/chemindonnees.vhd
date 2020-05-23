@@ -18,8 +18,8 @@ entity chemindonnees is
 Port (  
     CLK : in  STD_LOGIC;
     RST : in std_logic;
-	AOUT  : out std_logic_vector(7 downto 0);
-	BOUT  : out std_logic_vector(7 downto 0)
+	QA  : out std_logic_vector(7 downto 0);
+	QB  : out std_logic_vector(7 downto 0)
 	);
 
 end chemindonnees;
