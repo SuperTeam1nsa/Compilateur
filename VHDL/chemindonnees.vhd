@@ -18,8 +18,8 @@ entity chemindonnees is
 Port (  
     CLK : in  STD_LOGIC;
     RST : in std_logic;
-	QA  : out std_logic_vector(7 downto 0);
-	QB  : out std_logic_vector(7 downto 0)
+	AOUT  : out std_logic_vector(7 downto 0);
+	BOUT  : out std_logic_vector(7 downto 0)
 	);
 
 end chemindonnees;
@@ -240,6 +240,10 @@ pipeline4 : pipeline1 PORT MAP (
            OA => A_MEM,
            OB => B_MEM,
            OC => open);
+	
+	-- pour observation
+    AOUT <= QA;
+    BOUT <= QB;
 	
 -----------------------------------------------------------------------
 ----------------------------------Partie sensible
