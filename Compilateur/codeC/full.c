@@ -50,9 +50,9 @@ int main(){
 	printf(i);
 	}
 	if(lettre=='a'){}
-	//test des conditions booléennes avancées (affiche 1 1 1)
+	//test des conditions booléennes avancées (affiche 1 0 1)
 	int boolean1=(-3)>(-4);
-	int boolean2=30>=29;
+	int boolean2=30<=29;
 	int boolean3=!(((((1<2)==1)<=10)-1)!=0);
 	printf(boolean1);
 	printf(boolean2);
